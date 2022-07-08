@@ -1,0 +1,12 @@
+name: TheTerrierCityPlugin
+version: '${project.version}'
+main: fr.loxydev.ttcplugin.TheTerrierCityPlugin
+api-version: 1.19
+authors: [ LOxyDev ]
+description: The Terrier City minecraft server plugin.
+
+commands:
+  theterriercity:
+    description: Basic command for TTC Plugin
+    usage: /ttc [subcommand] {args}
+    aliases: [ttc]
