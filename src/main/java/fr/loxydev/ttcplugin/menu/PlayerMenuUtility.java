@@ -42,6 +42,16 @@ public class PlayerMenuUtility {
         return is;
     }
 
+    public ItemStack makeItem(Material material, String name, int amount, ArrayList<String> lore) {
+        ItemStack is = new ItemStack(material, amount);
+        ItemMeta im = is.getItemMeta();
+        im.setDisplayName(name);
+        im.setLore(lore);
+        is.setItemMeta(im);
+
+        return is;
+    }
+
     public ItemStack makeItem(Material material, ArrayList<String> lore) {
         ItemStack is = new ItemStack(material);
         ItemMeta im = is.getItemMeta();
