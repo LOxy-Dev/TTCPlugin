@@ -31,7 +31,7 @@ public class TestShop extends Menu {
 
     @Override
     public void handleMenu(InventoryClickEvent e, PlayerMenuUtility playerMenuUtility) {
-        if (e.getCurrentItem() == FILLER_GLASS) return;
+        if (e.getCurrentItem() == FILLER_GLASS || e.getCurrentItem() == null) return;
 
         Player player = playerMenuUtility.getPlayer();
         new ItemInterfaceMenu(itemsData.get(e.getSlot())).open(player); // If pagination of shop is modified, index of document has to be updated
