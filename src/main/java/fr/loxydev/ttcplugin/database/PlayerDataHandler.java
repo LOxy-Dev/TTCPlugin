@@ -61,6 +61,10 @@ public class PlayerDataHandler extends DataHandler {
         pushUpdate("points", amount);
     }
 
+    public void addPoints(int amount) {
+        setPointsAmount(getPointsAmount() + amount);
+    }
+
     /* TODO Implements Team
     public void setTeam(Team team) {
         pushUpdate("team", team.name);

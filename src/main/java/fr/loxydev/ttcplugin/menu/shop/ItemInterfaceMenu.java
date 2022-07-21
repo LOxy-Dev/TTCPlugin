@@ -1,8 +1,11 @@
 package fr.loxydev.ttcplugin.menu.shop;
 
 import fr.loxydev.ttcplugin.database.ItemDataHandler;
+import fr.loxydev.ttcplugin.database.PlayerDataHandler;
+import fr.loxydev.ttcplugin.database.ShopDataHandler;
 import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -114,8 +117,13 @@ public class ItemInterfaceMenu extends Menu {
             }
         }
 
-        // TODO update player's data
-        // TODO Update item's data
-        // TODO update shop's data
+        PlayerDataHandler playerData = new PlayerDataHandler(playerMenuUtility.getPlayer().getUniqueId());
+        playerData.addPoints(totalSale);
+        playerMenuUtility.getPlayer().sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "[TTC] You sold " + amount + " " + itemData.getItemName() + " for " + totalSale + " points.");
+
+        itemData.increaseSales(amount);
+
+        ShopDataHandler shopData = new ShopDataHandler(itemData.getShopName());
+        shopData.increasePurchases(amount);
     }
 }

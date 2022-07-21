@@ -50,8 +50,11 @@ public class ShopDataHandler extends DataHandler {
 
     public void setPurchaseAmount(int purchaseAmount) {
         pushUpdate("total_purchases", purchaseAmount);
-
         updateLevel();
+    }
+
+    public void increasePurchases(int amount) {
+        setPurchaseAmount(getPurchaseAmount() + amount);
     }
 
     // TODO Add methods to add/remove items to sell + update item data

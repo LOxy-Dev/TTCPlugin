@@ -82,6 +82,10 @@ public class ItemDataHandler extends DataHandler {
         updateLevel();
     }
 
+    public void increaseSales(int amount) {
+        setAmountSold(getAmountSold() + amount);
+    }
+
     // TODO update merchant data
     public void setShopName(String shopName) {
         pushUpdate("shop", shopName);
