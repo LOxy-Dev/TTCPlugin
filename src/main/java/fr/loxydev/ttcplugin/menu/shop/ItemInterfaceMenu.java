@@ -1,26 +1,25 @@
 package fr.loxydev.ttcplugin.menu.shop;
 
+import fr.loxydev.ttcplugin.database.ItemDataHandler;
 import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
-import org.bson.Document;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ItemInterfaceMenu extends Menu {
 
-    private Document item;
+    private ItemDataHandler itemData;
 
-    public ItemInterfaceMenu(Document item) {
-        this.item = item;
+    public ItemInterfaceMenu(ItemDataHandler itemData) {
+        this.itemData = itemData;
     }
 
     @Override
     public String getMenuName() {
-        return item.getString("shop") + "> " + getMaterial().name();
+        return itemData.getShopName() + "> " + getMaterial().name();
     }
 
     @Override
@@ -36,42 +35,45 @@ public class ItemInterfaceMenu extends Menu {
     @Override
     public void setMenuItems(PlayerMenuUtility playerMenuUtility) {
         // Create items' lore
+        int price = itemData.getPrice();
+        int nextLevelIn = itemData.getNextLevelIn();
+
         ArrayList<String> iLore = new ArrayList<>();
-        iLore.add("Sell " + getMaterial().name() + " for " + getPrice() + " points per item.");
+        iLore.add("Sell " + getMaterial().name() + " for " + price + " points per item.");
         iLore.add("\n");
-        iLore.add("Next level in " + nextLevel() + " items.");
+        iLore.add("Next level in " + nextLevelIn + " items.");
 
         ArrayList<String> i1Lore = new ArrayList<>();
-        i1Lore.add("Sell 1" + getMaterial().name() + " for " + getPrice() + "points.");
+        i1Lore.add("Sell 1" + getMaterial().name() + " for " + price + "points.");
 
         ArrayList<String> i10Lore = new ArrayList<>();
-        if (10 > nextLevel()) {
-            i10Lore.add("You will sell only " + nextLevel() + " items for " + getPrice()*nextLevel() + "points.");
+        if (10 > nextLevelIn) {
+            i10Lore.add("You will sell only " + nextLevelIn + " items for " + price * nextLevelIn + "points.");
             i10Lore.add("\n");
             i10Lore.add("This sale will change the level.");
         }
         else {
-            i10Lore.add("Sell 10 items for " + getPrice()*10 + "points.");
+            i10Lore.add("Sell 10 items for " + price*10 + "points.");
         }
 
         ArrayList<String> i64Lore = new ArrayList<>();
-        if (64 > nextLevel()) {
-            i10Lore.add("You will sell only " + nextLevel() + " items for " + getPrice()*nextLevel() + "points.");
+        if (64 > nextLevelIn) {
+            i10Lore.add("You will sell only " + nextLevelIn + " items for " + price*nextLevelIn + "points.");
             i10Lore.add("\n");
             i10Lore.add("This sale will change the level.");
         }
         else {
-            i10Lore.add("Sell 64 items for " + getPrice()*64 + "points.");
+            i10Lore.add("Sell 64 items for " + price*64 + "points.");
         }
 
         ArrayList<String> iAllLore = new ArrayList<>();
-        if (getItemsInInv(playerMenuUtility) > nextLevel()) {
-            i10Lore.add("You will sell only " + nextLevel() + " items for " + getPrice()*nextLevel() + "points.");
+        if (getItemsInInv(playerMenuUtility) > nextLevelIn) {
+            i10Lore.add("You will sell only " + nextLevelIn + " items for " + price*nextLevelIn + "points.");
             i10Lore.add("\n");
             i10Lore.add("This sale will change the level.");
         }
         else {
-            i10Lore.add("Sell all items in your inventory for " + getPrice()*getItemsInInv(playerMenuUtility) + "points.");
+            i10Lore.add("Sell all items in your inventory for " + price*getItemsInInv(playerMenuUtility) + "points.");
         }
 
         // Place items
@@ -92,23 +94,7 @@ public class ItemInterfaceMenu extends Menu {
 
     private Material getMaterial()
     {
-        return Material.getMaterial(item.getString("name"));
-    }
-
-    private int getPrice() {
-        int level = item.getInteger("level");
-        List<List<Integer>> levelList = (List<List<Integer>>) item.get("level_list");
-
-        return levelList.get(level).get(0);
-    }
-
-    private int nextLevel() {
-        int level = item.getInteger("level");
-        int sold = item.getInteger("sold");
-        List<List<Integer>> levelList = (List<List<Integer>>) item.get("level_list");
-        int levelAmount = levelList.get(level).get(1);
-
-        return levelAmount - sold;
+        return Material.getMaterial(itemData.getItemName());
     }
 
     private void sellItems(int amount, PlayerMenuUtility playerMenuUtility) {
@@ -116,12 +102,12 @@ public class ItemInterfaceMenu extends Menu {
         for (ItemStack item : playerMenuUtility.getPlayer().getInventory().getContents()) {
             if (item != null) if (item.getType() == getMaterial()) {
                 if (item.getAmount() >= amount) { // If there is enough item to delete in the slot
-                    totalSale += getPrice() * item.getAmount();
+                    totalSale += itemData.getPrice() * item.getAmount();
                     item.setAmount(item.getAmount()-amount);
                     break;
                 }
                 else {
-                    totalSale += getPrice() * item.getAmount();
+                    totalSale += itemData.getPrice() * item.getAmount();
                     item.setAmount(0);
                     amount -= item.getAmount();
                 }

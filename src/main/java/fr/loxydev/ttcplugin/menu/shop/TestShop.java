@@ -1,23 +1,21 @@
 package fr.loxydev.ttcplugin.menu.shop;
 
-import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
+import fr.loxydev.ttcplugin.database.ItemDataHandler;
+import fr.loxydev.ttcplugin.database.ShopDataHandler;
 import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
-import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import static com.mongodb.client.model.Filters.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestShop extends Menu {
 
-    private ArrayList<Document> itemsData = new ArrayList<>();
+    private ArrayList<ItemDataHandler> itemsData = new ArrayList<>();
 
     @Override
     public String getMenuName() {
@@ -40,14 +38,14 @@ public class TestShop extends Menu {
     @Override
     public void setMenuItems(PlayerMenuUtility playerMenuUtility) {
         // Query and store Shop info
-        Document shopData = (Document) TheTerrierCityPlugin.getPlugin().getShopsCol().find(eq("name", "Test Shop")).first();
+        ShopDataHandler shopData = new ShopDataHandler("Test Shop");
 
-        List<String> itemList = shopData.getList("item_list", String.class);
+        List<String> itemList = shopData.getItemList();
 
         for (int i = 0; i < itemList.size(); i++) {
             String material = itemList.get(i);
 
-            Document itemData = (Document) TheTerrierCityPlugin.getPlugin().getItemsCol().find(eq("name", material)).first();
+            ItemDataHandler itemData = new ItemDataHandler(material);
 
             if (itemData == null) {
                 Bukkit.getLogger().info("No " + material + " entry in item database.");
@@ -59,14 +57,13 @@ public class TestShop extends Menu {
 
             // Create item's lore
             ArrayList<String> itemLore = new ArrayList<>();
-            itemLore.add("Sold: " + itemData.getInteger("sold"));
+            itemLore.add("Sold: " + itemData.getAmountSold());
             itemLore.add("\n");
-            int itemLevel = itemData.getInteger("level");
-            List<List<Integer>> itemPrices = (List<List<Integer>>) itemData.get("level_list"); // Have to cast instead of .getList because can't figure how to replace List<Integer>.class
-            int itemPrice = itemPrices.get(itemLevel).get(0);
+            int itemLevel = itemData.getActualLevel();
+            int itemPrice = itemData.getPrice();
             itemLore.add("Price: " + itemPrice + " Points");
-            int untilNext = itemPrices.get(itemLevel).get(1) - itemData.getInteger("sold");
-            itemLore.add(untilNext + " until next price update");
+            int nextLevelIn = itemData.getNextLevelIn();
+            itemLore.add(nextLevelIn + " until next price update");
             itemLore.add("\n");
             int inInventory = 0;
             for (ItemStack item : playerMenuUtility.getPlayer().getInventory().getContents())
