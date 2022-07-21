@@ -22,7 +22,7 @@ public class ItemInterfaceMenu extends Menu {
 
     @Override
     public String getMenuName() {
-        return itemData.getShopName() + "> " + getMaterial().name();
+        return itemData.getShopName() + "> " + itemData.getMaterial().name();
     }
 
     @Override
@@ -32,7 +32,12 @@ public class ItemInterfaceMenu extends Menu {
 
     @Override
     public void handleMenu(InventoryClickEvent e, PlayerMenuUtility playerMenuUtility) {
+        int nextLevelIn = itemData.getNextLevelIn();
 
+        if (e.getCurrentItem().getType() == Material.PAPER)
+            sellItems(Math.min(e.getCurrentItem().getAmount(), nextLevelIn), playerMenuUtility);
+        else if (e.getCurrentItem().getType() == Material.CHEST)
+            sellItems(Math.min(playerMenuUtility.itemInInv(itemData.getMaterial()), nextLevelIn), playerMenuUtility);
     }
 
     @Override
@@ -42,12 +47,12 @@ public class ItemInterfaceMenu extends Menu {
         int nextLevelIn = itemData.getNextLevelIn();
 
         ArrayList<String> iLore = new ArrayList<>();
-        iLore.add("Sell " + getMaterial().name() + " for " + price + " points per item.");
+        iLore.add("Sell " + itemData.getMaterial().name() + " for " + price + " points per item.");
         iLore.add("\n");
         iLore.add("Next level in " + nextLevelIn + " items.");
 
         ArrayList<String> i1Lore = new ArrayList<>();
-        i1Lore.add("Sell 1" + getMaterial().name() + " for " + price + "points.");
+        i1Lore.add("Sell 1" + itemData.getMaterial().name() + " for " + price + "points.");
 
         ArrayList<String> i10Lore = new ArrayList<>();
         if (10 > nextLevelIn) {
@@ -61,49 +66,36 @@ public class ItemInterfaceMenu extends Menu {
 
         ArrayList<String> i64Lore = new ArrayList<>();
         if (64 > nextLevelIn) {
-            i10Lore.add("You will sell only " + nextLevelIn + " items for " + price*nextLevelIn + "points.");
-            i10Lore.add("\n");
-            i10Lore.add("This sale will change the level.");
+            i64Lore.add("You will sell only " + nextLevelIn + " items for " + price*nextLevelIn + "points.");
+            i64Lore.add("\n");
+            i64Lore.add("This sale will change the level.");
         }
         else {
-            i10Lore.add("Sell 64 items for " + price*64 + "points.");
+            i64Lore.add("Sell 64 items for " + price*64 + "points.");
         }
 
         ArrayList<String> iAllLore = new ArrayList<>();
-        if (getItemsInInv(playerMenuUtility) > nextLevelIn) {
-            i10Lore.add("You will sell only " + nextLevelIn + " items for " + price*nextLevelIn + "points.");
-            i10Lore.add("\n");
-            i10Lore.add("This sale will change the level.");
+        if (playerMenuUtility.itemInInv(itemData.getMaterial()) > nextLevelIn) {
+            iAllLore.add("You will sell only " + nextLevelIn + " items for " + price*nextLevelIn + "points.");
+            iAllLore.add("\n");
+            iAllLore.add("This sale will change the level.");
         }
         else {
-            i10Lore.add("Sell all items in your inventory for " + price*getItemsInInv(playerMenuUtility) + "points.");
+            iAllLore.add("Sell all items in your inventory for " + price* playerMenuUtility.itemInInv(itemData.getMaterial()) + "points.");
         }
 
         // Place items
-        inventory.setItem(2, playerMenuUtility.makeItem(getMaterial(), iLore));
+        inventory.setItem(2, playerMenuUtility.makeItem(itemData.getMaterial(), iLore));
         inventory.setItem(3, playerMenuUtility.makeItem(Material.PAPER, "Sell 1 item", i1Lore));
         inventory.setItem(4, playerMenuUtility.makeItem(Material.PAPER, "Sell 10 items", 10, i10Lore));
         inventory.setItem(5, playerMenuUtility.makeItem(Material.PAPER, "Sell a stack", 64, i64Lore));
         inventory.setItem(6, playerMenuUtility.makeItem(Material.CHEST, "Sell all your items", iAllLore));
     }
 
-    private int getItemsInInv(PlayerMenuUtility playerMenuUtility) {
-        int inInventory = 0;
-        for (ItemStack item : playerMenuUtility.getPlayer().getInventory().getContents())
-            if (item != null) if (item.getType() == getMaterial()) inInventory += item.getAmount();
-
-        return inInventory;
-    }
-
-    private Material getMaterial()
-    {
-        return Material.getMaterial(itemData.getItemName());
-    }
-
     private void sellItems(int amount, PlayerMenuUtility playerMenuUtility) {
         int totalSale = 0;
         for (ItemStack item : playerMenuUtility.getPlayer().getInventory().getContents()) {
-            if (item != null) if (item.getType() == getMaterial()) {
+            if (item != null) if (item.getType() == itemData.getMaterial()) {
                 if (item.getAmount() >= amount) { // If there is enough item to delete in the slot
                     totalSale += itemData.getPrice() * item.getAmount();
                     item.setAmount(item.getAmount()-amount);

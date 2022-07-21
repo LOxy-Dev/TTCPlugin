@@ -1,5 +1,7 @@
 package fr.loxydev.ttcplugin.database;
 
+import org.bukkit.Material;
+
 import java.util.List;
 
 public class ItemDataHandler extends DataHandler {
@@ -15,6 +17,10 @@ public class ItemDataHandler extends DataHandler {
     // Following methods are used to access database fields of an item
     public String getItemName() {
         return collectionName.toString();
+    }
+
+    public Material getMaterial() {
+        return Material.getMaterial(getItemName());
     }
 
     public int getAmountSold() {

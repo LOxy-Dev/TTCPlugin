@@ -100,4 +100,19 @@ public class PlayerMenuUtility {
     public void setUuidToManage(UUID uuidToManage) {
         this.uuidToManage = uuidToManage;
     }
+
+    public int itemInInv(Material item) {
+        int amount = 0;
+        for (ItemStack stack : p.getInventory().getContents())
+            if (stack != null) if (stack.getType() == item) amount += stack.getAmount();
+
+        return amount;
+    }
+
+    public boolean hasItem(Material item) {
+        for (ItemStack stack : p.getInventory().getContents())
+            if (stack != null) if (stack.getType() == item) return true;
+
+        return false;
+    }
 }

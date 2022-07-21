@@ -32,7 +32,9 @@ public class TestShop extends Menu {
         if (e.getCurrentItem() == FILLER_GLASS || e.getCurrentItem() == null) return;
 
         Player player = playerMenuUtility.getPlayer();
-        new ItemInterfaceMenu(itemsData.get(e.getSlot())).open(player); // If pagination of shop is modified, index of document has to be updated
+        ItemDataHandler item = itemsData.get(e.getSlot());
+        if (playerMenuUtility.hasItem(item.getMaterial()))
+            new ItemInterfaceMenu(item).open(player); // If pagination of shop is modified, index of document has to be updated
     }
 
     @Override
@@ -59,7 +61,6 @@ public class TestShop extends Menu {
             ArrayList<String> itemLore = new ArrayList<>();
             itemLore.add("Sold: " + itemData.getAmountSold());
             itemLore.add("\n");
-            int itemLevel = itemData.getActualLevel();
             int itemPrice = itemData.getPrice();
             itemLore.add("Price: " + itemPrice + " Points");
             int nextLevelIn = itemData.getNextLevelIn();
