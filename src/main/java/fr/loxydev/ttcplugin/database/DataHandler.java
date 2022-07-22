@@ -15,14 +15,20 @@ import static com.mongodb.client.model.Filters.*;
 
 public abstract class DataHandler {
 
+    protected static MongoClient mongoClient;
     protected MongoCollection<Document> collection;
     protected String nameField;
     protected Object collectionName;
     protected Document data;
 
     public static MongoDatabase connect() {
-        try (MongoClient mongoClient = MongoClients.create(TheTerrierCityPlugin.getPlugin().getConfig().getString("mongo_connect"))) {
+        try {
+            mongoClient = MongoClients.create(TheTerrierCityPlugin.getPlugin().getConfig().getString("mongo_connect"));
             return mongoClient.getDatabase("ttc_database");
+        } catch (MongoException e) {
+            Bukkit.getLogger().info("Failed to connect to MongoDB.");
+
+            return null;
         }
     }
 
