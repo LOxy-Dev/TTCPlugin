@@ -69,18 +69,13 @@ public class ItemDataHandler extends DataHandler {
     }
 
     public void updateLevel() {
-        int level = getActualLevel();
-        List<List<Integer>> levelList = getLevelList();
-        int amount = getAmountSold();
-
-        while (amount >= levelList.get(level-1).get(1) && amount <= levelList.get(level).get(1)) {
-            if (amount > levelList.get(level).get(1))
-                level++;
-            else
-                level--;
+        if (getNextLevelIn() <= 0) {
+            setLevel(getActualLevel()+1);
+            updateLevel();
+        } else if (getNextLevelIn() > getLevelList().get(getActualLevel()).get(1)) {
+            setLevel(getActualLevel()-1);
+            updateLevel();
         }
-
-        setLevel(level);
     }
 
     public void setAmountSold(int amount) {

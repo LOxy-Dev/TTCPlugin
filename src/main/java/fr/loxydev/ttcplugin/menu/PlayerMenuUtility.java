@@ -1,5 +1,6 @@
 package fr.loxydev.ttcplugin.menu;
 
+import fr.loxydev.ttcplugin.database.PlayerDataHandler;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +15,7 @@ public class PlayerMenuUtility {
 
     private Player p;
     private String shopID;
+    private PlayerDataHandler playerData;
 
     private Player playerToAdd;
     private UUID uuidToRemove;
@@ -21,6 +23,10 @@ public class PlayerMenuUtility {
 
     public PlayerMenuUtility(Player p) {
         this.p = p;
+        this.playerData = new PlayerDataHandler(p.getUniqueId());
+
+        if (playerData.isNull())
+            PlayerDataHandler.createPlayerData(p);
     }
 
     public ItemStack makeItem(Material material, String name) {
@@ -63,6 +69,10 @@ public class PlayerMenuUtility {
 
     public Player getPlayer() {
         return p;
+    }
+
+    public PlayerDataHandler getPlayerData() {
+        return playerData;
     }
 
     public Menu getLastMenu() {

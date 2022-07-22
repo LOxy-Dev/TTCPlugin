@@ -18,7 +18,7 @@ public class MenuListener implements Listener {
         // Make sure the player has a menu system object
         TheTerrierCityPlugin.getPlayerMenuUtility(player);
         // Get the player's ShopManagerMenu
-        PlayerMenuUtility playerMenuUtility = TheTerrierCityPlugin.shopManagerMenuList.get(player);
+        PlayerMenuUtility playerMenuUtility = TheTerrierCityPlugin.playerList.get(player);
 
         InventoryHolder holder = event.getInventory().getHolder();
         if (holder instanceof Menu menu) {

@@ -22,7 +22,7 @@ public class PlayerJoinLeaveListeners implements Listener {
         Player player = event.getPlayer();
 
         // Since the player left, get rid of the ShopManagerMenu objects for that player
-        if (TheTerrierCityPlugin.shopManagerMenuList.containsKey(player))
-            TheTerrierCityPlugin.shopManagerMenuList.remove(player);
+        if (TheTerrierCityPlugin.playerList.containsKey(player))
+            TheTerrierCityPlugin.playerList.remove(player);
     }
 }

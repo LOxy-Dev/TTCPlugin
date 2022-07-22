@@ -2,7 +2,12 @@ package fr.loxydev.ttcplugin.database;
 
 /* TODO Implements Team
 import fr.loxydev.ttcplugin.team.Team; */
+import com.mongodb.MongoException;
+import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -17,6 +22,19 @@ public class PlayerDataHandler extends DataHandler {
         this.collection = getCollection("playersdata");
         this.nameField = "uuid";
         update();
+    }
+
+    public static void createPlayerData(Player p) {
+        try {
+            TheTerrierCityPlugin.database.getCollection("playersdata").insertOne(new Document()
+                .append("_id", new ObjectId())
+                .append("uuid", p.getUniqueId())
+                .append("name", p.getDisplayName())
+                .append("points", 0)
+                .append("team", "default"));
+        } catch (MongoException me) {
+            System.err.println("Unable to insert due to an error: " + me);
+        }
     }
 
     // Following methods are used to access database fields of a player

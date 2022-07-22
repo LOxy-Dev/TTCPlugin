@@ -18,7 +18,7 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
     private static TheTerrierCityPlugin plugin;
 
     private static ArrayList<Menu> LIST_OF_MENUS;
-    public static HashMap<Player, PlayerMenuUtility> shopManagerMenuList = new HashMap<>();
+    public static HashMap<Player, PlayerMenuUtility> playerList = new HashMap<>();
     public static MongoDatabase database;
 
     @Override
@@ -55,13 +55,13 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
 
     public static PlayerMenuUtility getPlayerMenuUtility(Player p) {
         PlayerMenuUtility playerMenuUtility;
-        if (!(TheTerrierCityPlugin.shopManagerMenuList.containsKey(p))) {
+        if (!(TheTerrierCityPlugin.playerList.containsKey(p))) {
             playerMenuUtility = new PlayerMenuUtility(p);
-            TheTerrierCityPlugin.shopManagerMenuList.put(p, playerMenuUtility);
+            TheTerrierCityPlugin.playerList.put(p, playerMenuUtility);
 
             return playerMenuUtility;
         } else {
-            return TheTerrierCityPlugin.shopManagerMenuList.get(p);
+            return TheTerrierCityPlugin.playerList.get(p);
         }
     }
 }

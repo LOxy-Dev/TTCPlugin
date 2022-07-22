@@ -5,8 +5,10 @@ import fr.loxydev.ttcplugin.database.PlayerDataHandler;
 import fr.loxydev.ttcplugin.database.ShopDataHandler;
 import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 
 public class ItemInterfaceMenu extends Menu {
 
-    private ItemDataHandler itemData;
+    private final ItemDataHandler itemData;
 
     public ItemInterfaceMenu(ItemDataHandler itemData) {
         this.itemData = itemData;
@@ -22,7 +24,7 @@ public class ItemInterfaceMenu extends Menu {
 
     @Override
     public String getMenuName() {
-        return itemData.getShopName() + "> " + itemData.getMaterial().name();
+        return itemData.getShopName() + "> " + itemData.getMaterial().toString();
     }
 
     @Override
@@ -32,12 +34,31 @@ public class ItemInterfaceMenu extends Menu {
 
     @Override
     public void handleMenu(InventoryClickEvent e, PlayerMenuUtility playerMenuUtility) {
+        int itemInInv = playerMenuUtility.itemInInv(itemData.getMaterial());
+        if (itemInInv == 0) {
+            playerMenuUtility.getPlayer().closeInventory();
+            return;
+        }
+
         int nextLevelIn = itemData.getNextLevelIn();
 
-        if (e.getCurrentItem().getType() == Material.PAPER)
-            sellItems(Math.min(e.getCurrentItem().getAmount(), nextLevelIn), playerMenuUtility);
+        if (e.getCurrentItem().getType() == Material.PAPER) {
+            int amount = Math.min(e.getCurrentItem().getAmount(), itemInInv);
+
+            if (amount <= nextLevelIn) {
+                sellItems(amount, playerMenuUtility);
+            } else {
+                sellItems(nextLevelIn, playerMenuUtility);
+                playerMenuUtility.getPlayer().closeInventory();
+            }
+        }
         else if (e.getCurrentItem().getType() == Material.CHEST)
-            sellItems(Math.min(playerMenuUtility.itemInInv(itemData.getMaterial()), nextLevelIn), playerMenuUtility);
+            if (itemInInv <= nextLevelIn) {
+                sellItems(itemInInv, playerMenuUtility);
+            } else {
+                sellItems(nextLevelIn, playerMenuUtility);
+                playerMenuUtility.getPlayer().closeInventory();
+            }
     }
 
     @Override
@@ -47,7 +68,7 @@ public class ItemInterfaceMenu extends Menu {
         int nextLevelIn = itemData.getNextLevelIn();
 
         ArrayList<String> iLore = new ArrayList<>();
-        iLore.add("Sell " + itemData.getMaterial().name() + " for " + price + " points per item.");
+        iLore.add("Sell " + itemData.getMaterial().toString() + " for " + price + " points per item.");
         iLore.add("\n");
         iLore.add("Next level in " + nextLevelIn + " items.");
 
@@ -93,25 +114,27 @@ public class ItemInterfaceMenu extends Menu {
     }
 
     private void sellItems(int amount, PlayerMenuUtility playerMenuUtility) {
-        int totalSale = 0;
         for (ItemStack item : playerMenuUtility.getPlayer().getInventory().getContents()) {
+            if (amount <= 0) break;
+
             if (item != null) if (item.getType() == itemData.getMaterial()) {
                 if (item.getAmount() >= amount) { // If there is enough item to delete in the slot
-                    totalSale += itemData.getPrice() * item.getAmount();
                     item.setAmount(item.getAmount()-amount);
                     break;
                 }
                 else {
-                    totalSale += itemData.getPrice() * item.getAmount();
-                    item.setAmount(0);
                     amount -= item.getAmount();
+                    item.setAmount(0);
                 }
             }
         }
 
-        PlayerDataHandler playerData = new PlayerDataHandler(playerMenuUtility.getPlayer().getUniqueId());
+        int totalSale = amount * itemData.getPrice();
+
+        PlayerDataHandler playerData = playerMenuUtility.getPlayerData();
         playerData.addPoints(totalSale);
         playerMenuUtility.getPlayer().sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "[TTC] You sold " + amount + " " + itemData.getItemName() + " for " + totalSale + " points.");
+        playerMenuUtility.getPlayer().playSound(playerMenuUtility.getPlayer(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
 
         itemData.increaseSales(amount);
 

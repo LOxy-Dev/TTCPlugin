@@ -60,4 +60,8 @@ public abstract class DataHandler {
     public void pushUpdate(String field, Object value) {
         pushUpdates(Updates.set(field, value));
     }
+
+    public boolean isNull() {
+        return data == null;
+    }
 }
