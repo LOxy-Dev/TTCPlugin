@@ -21,15 +21,19 @@ public abstract class DataHandler {
     protected Object collectionName;
     protected Document data;
 
-    public static MongoDatabase connect() {
+    public static MongoDatabase connect(String uri) {
         try {
-            mongoClient = MongoClients.create(TheTerrierCityPlugin.getPlugin().getConfig().getString("mongo_connect"));
-            return mongoClient.getDatabase("ttc_database");
+            mongoClient = MongoClients.create(uri);
+            return mongoClient.getDatabase("ttc_dataset");
         } catch (MongoException e) {
             Bukkit.getLogger().info("Failed to connect to MongoDB.");
 
             return null;
         }
+    }
+
+    public static MongoDatabase connect() {
+        return connect(TheTerrierCityPlugin.getPlugin().getConfig().getString("mongo_connect"));
     }
 
     protected MongoCollection<Document> getCollection(String name) {
