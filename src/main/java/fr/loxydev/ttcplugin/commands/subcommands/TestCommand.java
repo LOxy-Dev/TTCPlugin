@@ -1,11 +1,11 @@
 package fr.loxydev.ttcplugin.commands.subcommands;
 
-import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
 import fr.loxydev.ttcplugin.commands.SubCommand;
-import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
-import fr.loxydev.ttcplugin.menu.shop.TestShop;
+import io.github.bananapuncher714.nbteditor.NBTEditor;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 
 public class TestCommand extends SubCommand {
     @Override
@@ -26,9 +26,13 @@ public class TestCommand extends SubCommand {
     @Override
     public void perform(Player player, String[] args) {
         if (player.hasPermission("ttc.admin")) {
-            PlayerMenuUtility playerMenuUtility = TheTerrierCityPlugin.getPlayerMenuUtility(player);
-
-            new TestShop().open(player);
+            if(player.hasPermission("test.setvillager")) {
+                Villager v = (Villager) player.getWorld().spawnEntity(player.getLocation(), EntityType.VILLAGER);
+                v.setCustomName("Test Shop");
+                v.setSilent(true);
+                v.setProfession(Villager.Profession.NITWIT);
+                NBTEditor.set(v, true, "NoAI");
+            }
         } else {
             player.sendMessage(ChatColor.RED + "This command is for admins.");
         }
