@@ -1,6 +1,5 @@
 package fr.loxydev.ttcplugin.menu.admin;
 
-import fr.loxydev.ttcplugin.database.ItemDataHandler;
 import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
 import org.bukkit.Material;
