@@ -8,6 +8,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+
 public class AdminMenu extends Menu {
     @Override
     public String getMenuName() {
@@ -30,12 +32,8 @@ public class AdminMenu extends Menu {
 
     @Override
     public void setMenuItems(PlayerMenuUtility playerMenuUtility) {
-        ItemStack close = new ItemStack(Material.BARRIER);
-        ItemMeta closeMeta = close.getItemMeta();
-        closeMeta.setDisplayName("Close menu");
-        close.setItemMeta(closeMeta);
-
-        inventory.setItem(22, close);
+        // Close menu Item
+        inventory.setItem(22, makeItem(Material.BARRIER, "Close menu"));
 
         setFillerGlass();
     }
