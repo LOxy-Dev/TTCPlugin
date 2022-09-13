@@ -13,13 +13,18 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestShop extends Menu {
+public class ShopMenu extends Menu {
 
     private ArrayList<ItemDataHandler> itemsData = new ArrayList<>();
+    private ShopDataHandler shopData;
+
+    public ShopMenu(String shopName) {
+        this.shopData = new ShopDataHandler(shopName);
+    }
 
     @Override
     public String getMenuName() {
-        return "Test Shop";
+        return shopData.getShopName();
     }
 
     @Override
@@ -40,8 +45,7 @@ public class TestShop extends Menu {
     @Override
     public void setMenuItems(PlayerMenuUtility playerMenuUtility) {
         // Query and store Shop info
-        ShopDataHandler shopData = new ShopDataHandler("Test Shop");
-
+        shopData.update();
         List<String> itemList = shopData.getItemList();
 
         for (int i = 0; i < itemList.size(); i++) {
@@ -49,9 +53,9 @@ public class TestShop extends Menu {
 
             ItemDataHandler itemData = new ItemDataHandler(material);
 
-            if (itemData == null) {
+            if (itemData.isNull()) {
                 Bukkit.getLogger().info("No " + material + " entry in item database.");
-                break;
+                continue;
             }
 
             // Store item data's Document

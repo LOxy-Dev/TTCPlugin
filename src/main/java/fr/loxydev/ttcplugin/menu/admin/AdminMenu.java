@@ -28,12 +28,16 @@ public class AdminMenu extends Menu {
         Player player = playerMenuUtility.getPlayer();
 
         if (e.getCurrentItem().getType() == Material.BARRIER) player.closeInventory();
+
+        if (e.getCurrentItem().getType() == Material.EGG) new SummonMenu().open(player);
     }
 
     @Override
     public void setMenuItems(PlayerMenuUtility playerMenuUtility) {
         // Close menu Item
         inventory.setItem(22, makeItem(Material.BARRIER, "Close menu"));
+        // Spawn NPC Item
+        inventory.setItem(0, makeItem(Material.EGG, "Summon NPC"));
 
         setFillerGlass();
     }

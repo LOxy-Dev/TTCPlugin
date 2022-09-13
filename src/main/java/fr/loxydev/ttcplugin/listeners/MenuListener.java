@@ -3,7 +3,7 @@ package fr.loxydev.ttcplugin.listeners;
 import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
 import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
-import fr.loxydev.ttcplugin.menu.shop.TestShop;
+import fr.loxydev.ttcplugin.menu.shop.ShopMenu;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -23,11 +23,7 @@ public class MenuListener implements Listener {
 
         Player player = event.getPlayer();
 
-        switch (entity.getCustomName()) {
-            case "Test Shop":
-                new TestShop().open(player);
-                break;
-        }
+        new ShopMenu(entity.getCustomName()).open(player);
     }
 
     @EventHandler
