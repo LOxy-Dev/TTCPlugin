@@ -1,7 +1,12 @@
 package fr.loxydev.ttcplugin.database;
 
+import com.mongodb.MongoException;
+import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.bukkit.Material;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemDataHandler extends DataHandler {
@@ -12,6 +17,20 @@ public class ItemDataHandler extends DataHandler {
         this.collection = getCollection("items");
         this.nameField = "name";
         update();
+    }
+
+    public static void createItemData(Material material, String shop, ArrayList<ArrayList<Integer>> prices) {
+        try {
+            TheTerrierCityPlugin.database.getCollection("items").insertOne(new Document()
+                    .append("_id", new ObjectId())
+                    .append("name", material.name())
+                    .append("level", 0)
+                    .append("level_list", prices)
+                    .append("sold", 0)
+                    .append("shop", shop));
+        } catch (MongoException me) {
+            System.err.println("Unable to insert Item " + material.name() + " due to an error: " + me);
+        }
     }
 
     // Following methods are used to access database fields of an item
