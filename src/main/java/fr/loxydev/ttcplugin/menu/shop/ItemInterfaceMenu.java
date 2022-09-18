@@ -5,7 +5,6 @@ import fr.loxydev.ttcplugin.database.PlayerDataHandler;
 import fr.loxydev.ttcplugin.database.ShopDataHandler;
 import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -140,5 +139,7 @@ public class ItemInterfaceMenu extends Menu {
 
         ShopDataHandler shopData = new ShopDataHandler(itemData.getShopName());
         shopData.increasePurchases(amount);
+
+        playerMenuUtility.getScoreboard().update();
     }
 }

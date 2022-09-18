@@ -1,9 +1,8 @@
 package fr.loxydev.ttcplugin.database;
 
-/* TODO Implements Team
-import fr.loxydev.ttcplugin.team.Team; */
 import com.mongodb.MongoException;
 import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
+import fr.loxydev.ttcplugin.team.Team;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.bukkit.Bukkit;
@@ -55,10 +54,10 @@ public class PlayerDataHandler extends DataHandler {
         return data.getInteger("points");
     }
 
-    /* TODO Implements Team
+    // TODO Implements Team
     public Team getTeam() {
-        return Team.find(data.getString("team"));
-    }*/
+        return null;
+    }
 
     // The followings methods are used to set database fields
     public void setUuid(UUID uuid) {
@@ -83,12 +82,11 @@ public class PlayerDataHandler extends DataHandler {
         setPointsAmount(getPointsAmount() + amount);
     }
 
-    /* TODO Implements Team
     public void setTeam(Team team) {
-        pushUpdate("team", team.name);
+        pushUpdate("team", team.getName());
     }
 
     public void setTeam(String teamName) {
         pushUpdate("team", teamName);
-    }*/
     }
+}
