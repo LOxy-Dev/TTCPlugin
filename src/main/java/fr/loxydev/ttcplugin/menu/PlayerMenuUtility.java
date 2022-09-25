@@ -2,6 +2,7 @@ package fr.loxydev.ttcplugin.menu;
 
 import fr.loxydev.ttcplugin.database.PlayerDataHandler;
 import fr.loxydev.ttcplugin.scoreboard.PlayerScoreboard;
+import fr.loxydev.ttcplugin.team.Team;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +19,10 @@ public class PlayerMenuUtility {
     private final PlayerDataHandler playerData;
     private final PlayerScoreboard pBoard;
 
+    private final Team team;
+
     private Player playerToAdd;
+
     private UUID uuidToRemove;
     private UUID uuidToManage;
 
@@ -29,7 +33,8 @@ public class PlayerMenuUtility {
         if (playerData.isNull())
             PlayerDataHandler.createPlayerData(p);
 
-        pBoard = new PlayerScoreboard(p);
+        this.team = playerData.getTeam();
+        pBoard = new PlayerScoreboard(this);
     }
 
     public ItemStack makeItem(Material material, String name) {
@@ -76,6 +81,10 @@ public class PlayerMenuUtility {
 
     public PlayerDataHandler getPlayerData() {
         return playerData;
+    }
+
+    public Team getTeam() {
+        return team;
     }
 
     public Menu getLastMenu() {
