@@ -54,9 +54,10 @@ public class PlayerDataHandler extends DataHandler {
         return data.getInteger("points");
     }
 
-    // TODO Implements Team
     public Team getTeam() {
-        return null;
+        TeamDataHandler teamData = new TeamDataHandler(data.getString("team"));
+
+        return new Team(teamData.getTeamName(), teamData.getColor(), teamData.getPlayers());
     }
 
     // The followings methods are used to set database fields
