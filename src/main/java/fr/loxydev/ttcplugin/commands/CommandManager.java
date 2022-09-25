@@ -2,6 +2,7 @@ package fr.loxydev.ttcplugin.commands;
 
 import fr.loxydev.ttcplugin.commands.subcommands.AdminCommand;
 import fr.loxydev.ttcplugin.commands.subcommands.HelpCommand;
+import fr.loxydev.ttcplugin.commands.subcommands.RefreshCommand;
 import fr.loxydev.ttcplugin.commands.subcommands.TestCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -19,6 +20,7 @@ public class CommandManager implements CommandExecutor {
         // Add subcommands here
         subcommands.add(new HelpCommand());
         subcommands.add(new AdminCommand());
+        subcommands.add(new RefreshCommand());
         subcommands.add(new TestCommand());
     }
 
