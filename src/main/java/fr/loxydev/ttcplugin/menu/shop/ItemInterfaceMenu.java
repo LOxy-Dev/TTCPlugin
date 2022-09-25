@@ -72,11 +72,11 @@ public class ItemInterfaceMenu extends Menu {
         iLore.add("Next level in " + nextLevelIn + " items.");
 
         ArrayList<String> i1Lore = new ArrayList<>();
-        i1Lore.add("Sell 1" + itemData.getMaterial().name() + " for " + price + "points.");
+        i1Lore.add("Sell 1" + itemData.getMaterial().name() + " for " + price + " points.");
 
         ArrayList<String> i10Lore = new ArrayList<>();
         if (10 > nextLevelIn) {
-            i10Lore.add("You will sell only " + nextLevelIn + " items for " + price * nextLevelIn + "points.");
+            i10Lore.add("You will sell only " + nextLevelIn + " items for " + price*nextLevelIn + " points.");
             i10Lore.add("\n");
             i10Lore.add("This sale will change the level.");
         }
@@ -86,22 +86,22 @@ public class ItemInterfaceMenu extends Menu {
 
         ArrayList<String> i64Lore = new ArrayList<>();
         if (64 > nextLevelIn) {
-            i64Lore.add("You will sell only " + nextLevelIn + " items for " + price*nextLevelIn + "points.");
+            i64Lore.add("You will sell only " + nextLevelIn + " items for " + price*nextLevelIn + " points.");
             i64Lore.add("\n");
             i64Lore.add("This sale will change the level.");
         }
         else {
-            i64Lore.add("Sell 64 items for " + price*64 + "points.");
+            i64Lore.add("Sell 64 items for " + price*64 + " points.");
         }
 
         ArrayList<String> iAllLore = new ArrayList<>();
         if (playerMenuUtility.itemInInv(itemData.getMaterial()) > nextLevelIn) {
-            iAllLore.add("You will sell only " + nextLevelIn + " items for " + price*nextLevelIn + "points.");
+            iAllLore.add("You will sell only " + nextLevelIn + " items for " + price*nextLevelIn + " points.");
             iAllLore.add("\n");
             iAllLore.add("This sale will change the level.");
         }
         else {
-            iAllLore.add("Sell all items in your inventory for " + price* playerMenuUtility.itemInInv(itemData.getMaterial()) + "points.");
+            iAllLore.add("Sell all items in your inventory for " + price* playerMenuUtility.itemInInv(itemData.getMaterial()) + " points.");
         }
 
         // Place items
