@@ -1,7 +1,7 @@
 package fr.loxydev.ttcplugin.menu.admin;
 
 import fr.loxydev.ttcplugin.menu.Menu;
-import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ public class PlayerSettingsAdminMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e, PlayerMenuUtility playerMenuUtility) {
+    public void handleMenu(InventoryClickEvent e, PlayerUtility playerMenuUtility) {
         Player p = playerMenuUtility.getPlayer();
         if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
             new ManagePlayerAdminMenu().open(p);
@@ -28,7 +28,7 @@ public class PlayerSettingsAdminMenu extends Menu {
     }
 
     @Override
-    public void setMenuItems(PlayerMenuUtility playerMenuUtility) {
+    public void setMenuItems(PlayerUtility playerMenuUtility) {
         ItemStack back = makeItem(Material.BARRIER, ChatColor.RED + "Back");
 
         inventory.setItem(22, back);

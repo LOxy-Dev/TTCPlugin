@@ -1,6 +1,6 @@
 package fr.loxydev.ttcplugin.database;
 
-import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import fr.loxydev.ttcplugin.team.Team;
 import org.bukkit.ChatColor;
 
@@ -79,15 +79,15 @@ public class TeamDataHandler extends DataHandler {
         pushUpdate("points", points);
     }
 
-    public void setPlayers(ArrayList<PlayerMenuUtility> players) {
+    public void setPlayers(ArrayList<PlayerUtility> players) {
         ArrayList<UUID> uuids = new ArrayList<>();
-        for (PlayerMenuUtility player : players)
+        for (PlayerUtility player : players)
             uuids.add(player.getPlayer().getUniqueId());
 
         pushUpdate("players", players);
     }
 
-    public void addPlayer(PlayerMenuUtility player) {
+    public void addPlayer(PlayerUtility player) {
         update();
         ArrayList<PlayerDataHandler> players = getPlayers();
         players.add(player.getPlayerData());
@@ -99,7 +99,7 @@ public class TeamDataHandler extends DataHandler {
         pushUpdate("players", uuids);
     }
 
-    public void removePlayer(PlayerMenuUtility player) {
+    public void removePlayer(PlayerUtility player) {
         update();
         ArrayList<PlayerDataHandler> players = getPlayers();
         players.remove(player.getPlayerData());

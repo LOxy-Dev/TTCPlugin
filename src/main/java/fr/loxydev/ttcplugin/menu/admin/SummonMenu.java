@@ -1,7 +1,7 @@
 package fr.loxydev.ttcplugin.menu.admin;
 
 import fr.loxydev.ttcplugin.menu.Menu;
-import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -22,7 +22,7 @@ public class SummonMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e, PlayerMenuUtility playerMenuUtility) {
+    public void handleMenu(InventoryClickEvent e, PlayerUtility playerMenuUtility) {
         String shopName;
         Player p = playerMenuUtility.getPlayer();
         switch (e.getSlot()) {
@@ -45,7 +45,7 @@ public class SummonMenu extends Menu {
     }
 
     @Override
-    public void setMenuItems(PlayerMenuUtility playerMenuUtility) {
+    public void setMenuItems(PlayerUtility playerMenuUtility) {
         inventory.setItem(0, makeItem(Material.DIRT, "Trash Shopkeeper"));
         inventory.setItem(1, makeItem(Material.WHEAT, "Culture Shopkeeper"));
         inventory.setItem(2, makeItem(Material.IRON_ORE, "Material Shopkeeper"));

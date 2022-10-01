@@ -1,7 +1,7 @@
 package fr.loxydev.ttcplugin.scoreboard;
 
 import fr.loxydev.ttcplugin.database.PlayerDataHandler;
-import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ public class PlayerScoreboard {
     private final Player player;
     private final PlayerDataHandler playerData;
 
-    public PlayerScoreboard(PlayerMenuUtility player) {
+    public PlayerScoreboard(PlayerUtility player) {
         this.player = player.getPlayer();
         playerData = player.getPlayerData();
 

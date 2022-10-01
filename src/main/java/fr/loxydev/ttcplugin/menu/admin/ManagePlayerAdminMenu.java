@@ -1,7 +1,7 @@
 package fr.loxydev.ttcplugin.menu.admin;
 
 import fr.loxydev.ttcplugin.menu.Menu;
-import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class ManagePlayerAdminMenu extends Menu {
@@ -16,12 +16,12 @@ public class ManagePlayerAdminMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e, PlayerMenuUtility playerMenuUtility) {
+    public void handleMenu(InventoryClickEvent e, PlayerUtility playerMenuUtility) {
 
     }
 
     @Override
-    public void setMenuItems(PlayerMenuUtility playerMenuUtility) {
+    public void setMenuItems(PlayerUtility playerMenuUtility) {
 
     }
 }

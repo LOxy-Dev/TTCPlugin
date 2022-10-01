@@ -3,7 +3,7 @@ package fr.loxydev.ttcplugin.menu.shop;
 import fr.loxydev.ttcplugin.database.ItemDataHandler;
 import fr.loxydev.ttcplugin.database.ShopDataHandler;
 import fr.loxydev.ttcplugin.menu.Menu;
-import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -33,7 +33,7 @@ public class ShopMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e, PlayerMenuUtility playerMenuUtility) {
+    public void handleMenu(InventoryClickEvent e, PlayerUtility playerMenuUtility) {
         if (e.getCurrentItem() == FILLER_GLASS || e.getCurrentItem() == null) return;
 
         Player player = playerMenuUtility.getPlayer();
@@ -43,7 +43,7 @@ public class ShopMenu extends Menu {
     }
 
     @Override
-    public void setMenuItems(PlayerMenuUtility playerMenuUtility) {
+    public void setMenuItems(PlayerUtility playerMenuUtility) {
         // Query and store Shop info
         shopData.update();
         List<String> itemList = shopData.getItemList();

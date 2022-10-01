@@ -1,7 +1,7 @@
 package fr.loxydev.ttcplugin.team;
 
 import fr.loxydev.ttcplugin.database.PlayerDataHandler;
-import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class Team {
         return points;
     }
 
-    public void addPlayer(PlayerMenuUtility player) {
+    public void addPlayer(PlayerUtility player) {
         if (players.contains(player)) return;
 
         players.add(player.getPlayerData());
@@ -57,7 +57,7 @@ public class Team {
         this.players = players;
     }
 
-    public void removePlayer(PlayerMenuUtility player) {
+    public void removePlayer(PlayerUtility player) {
         players.remove(player);
     }
 

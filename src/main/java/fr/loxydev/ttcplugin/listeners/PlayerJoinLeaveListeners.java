@@ -17,7 +17,7 @@ public class PlayerJoinLeaveListeners implements Listener {
         event.setJoinMessage("[" + ChatColor.GREEN + "+" + ChatColor.RESET + "] " + ChatColor.ITALIC + ChatColor.BOLD + player.getName());
 
         // Every time a player joins, assign them a personal MenuUtility object
-        TheTerrierCityPlugin.getPlayerMenuUtility(player);
+        TheTerrierCityPlugin.getPlayerUtility(player);
     }
 
     @EventHandler

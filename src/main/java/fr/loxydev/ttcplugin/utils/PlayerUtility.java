@@ -1,6 +1,7 @@
-package fr.loxydev.ttcplugin.menu;
+package fr.loxydev.ttcplugin.utils;
 
 import fr.loxydev.ttcplugin.database.PlayerDataHandler;
+import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.scoreboard.PlayerScoreboard;
 import fr.loxydev.ttcplugin.team.Team;
 import org.bukkit.Material;
@@ -11,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class PlayerMenuUtility {
+public class PlayerUtility {
 
     private Menu lastMenu;
 
@@ -26,7 +27,7 @@ public class PlayerMenuUtility {
     private UUID uuidToRemove;
     private UUID uuidToManage;
 
-    public PlayerMenuUtility(Player p) {
+    public PlayerUtility(Player p) {
         this.p = p;
         this.playerData = new PlayerDataHandler(p.getUniqueId());
 

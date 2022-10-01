@@ -2,7 +2,7 @@ package fr.loxydev.ttcplugin.menu.admin;
 
 import fr.loxydev.ttcplugin.database.TeamDataHandler;
 import fr.loxydev.ttcplugin.menu.Menu;
-import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -19,7 +19,7 @@ public class AdminMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e, PlayerMenuUtility playerMenuUtility) {
+    public void handleMenu(InventoryClickEvent e, PlayerUtility playerMenuUtility) {
         if (e.getCurrentItem() == FILLER_GLASS || e.getCurrentItem() == null) return;
 
         Player player = playerMenuUtility.getPlayer();
@@ -35,7 +35,7 @@ public class AdminMenu extends Menu {
     }
 
     @Override
-    public void setMenuItems(PlayerMenuUtility playerMenuUtility) {
+    public void setMenuItems(PlayerUtility playerMenuUtility) {
         // Close menu Item
         inventory.setItem(22, makeItem(Material.BARRIER, "Close menu"));
         // Spawn NPC Item

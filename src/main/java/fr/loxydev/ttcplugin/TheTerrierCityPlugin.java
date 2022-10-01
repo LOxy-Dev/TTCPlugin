@@ -6,7 +6,7 @@ import fr.loxydev.ttcplugin.database.DataHandler;
 import fr.loxydev.ttcplugin.listeners.PlayerJoinLeaveListeners;
 import fr.loxydev.ttcplugin.listeners.MenuListener;
 import fr.loxydev.ttcplugin.menu.Menu;
-import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,7 +18,7 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
     private static TheTerrierCityPlugin plugin;
 
     private static ArrayList<Menu> LIST_OF_MENUS;
-    public static HashMap<Player, PlayerMenuUtility> playerList = new HashMap<>();
+    public static HashMap<Player, PlayerUtility> playerList = new HashMap<>();
     public static MongoDatabase database;
 
     @Override
@@ -53,10 +53,10 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
         return LIST_OF_MENUS;
     }
 
-    public static PlayerMenuUtility getPlayerMenuUtility(Player p) {
-        PlayerMenuUtility playerMenuUtility;
+    public static PlayerUtility getPlayerUtility(Player p) {
+        PlayerUtility playerMenuUtility;
         if (!(TheTerrierCityPlugin.playerList.containsKey(p))) {
-            playerMenuUtility = new PlayerMenuUtility(p);
+            playerMenuUtility = new PlayerUtility(p);
             TheTerrierCityPlugin.playerList.put(p, playerMenuUtility);
 
             return playerMenuUtility;

@@ -2,7 +2,7 @@ package fr.loxydev.ttcplugin.listeners;
 
 import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
 import fr.loxydev.ttcplugin.menu.Menu;
-import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import fr.loxydev.ttcplugin.menu.shop.ShopMenu;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import org.bukkit.entity.Entity;
@@ -31,9 +31,9 @@ public class MenuListener implements Listener {
         Player player = (Player) event.getWhoClicked();
 
         // Make sure the player has a menu system object
-        TheTerrierCityPlugin.getPlayerMenuUtility(player);
+        TheTerrierCityPlugin.getPlayerUtility(player);
         // Get the player's ShopManagerMenu
-        PlayerMenuUtility playerMenuUtility = TheTerrierCityPlugin.playerList.get(player);
+        PlayerUtility playerMenuUtility = TheTerrierCityPlugin.playerList.get(player);
 
         InventoryHolder holder = event.getInventory().getHolder();
         if (holder instanceof Menu menu) {

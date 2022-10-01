@@ -1,6 +1,7 @@
 package fr.loxydev.ttcplugin.menu;
 
 import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,14 +28,14 @@ public abstract class Menu implements InventoryHolder{
 
     public abstract int getSlots();
 
-    public abstract void handleMenu(InventoryClickEvent e, PlayerMenuUtility playerMenuUtility);
+    public abstract void handleMenu(InventoryClickEvent e, PlayerUtility playerMenuUtility);
 
-    public abstract void setMenuItems(PlayerMenuUtility playerMenuUtility);
+    public abstract void setMenuItems(PlayerUtility playerMenuUtility);
 
     public void open(Player p) {
         inventory = Bukkit.createInventory(this, getSlots(), getMenuName());
 
-        this.setMenuItems(TheTerrierCityPlugin.getPlayerMenuUtility(p));
+        this.setMenuItems(TheTerrierCityPlugin.getPlayerUtility(p));
 
         p.openInventory(inventory);
     }

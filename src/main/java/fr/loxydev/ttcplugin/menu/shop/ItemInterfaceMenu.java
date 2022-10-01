@@ -4,7 +4,7 @@ import fr.loxydev.ttcplugin.database.ItemDataHandler;
 import fr.loxydev.ttcplugin.database.PlayerDataHandler;
 import fr.loxydev.ttcplugin.database.ShopDataHandler;
 import fr.loxydev.ttcplugin.menu.Menu;
-import fr.loxydev.ttcplugin.menu.PlayerMenuUtility;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -32,7 +32,7 @@ public class ItemInterfaceMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e, PlayerMenuUtility playerMenuUtility) {
+    public void handleMenu(InventoryClickEvent e, PlayerUtility playerMenuUtility) {
         int itemInInv = playerMenuUtility.itemInInv(itemData.getMaterial());
         if (itemInInv == 0) {
             playerMenuUtility.getPlayer().closeInventory();
@@ -61,7 +61,7 @@ public class ItemInterfaceMenu extends Menu {
     }
 
     @Override
-    public void setMenuItems(PlayerMenuUtility playerMenuUtility) {
+    public void setMenuItems(PlayerUtility playerMenuUtility) {
         // Create items' lore
         int price = itemData.getPrice();
         int nextLevelIn = itemData.getNextLevelIn();
@@ -112,7 +112,7 @@ public class ItemInterfaceMenu extends Menu {
         inventory.setItem(6, playerMenuUtility.makeItem(Material.CHEST, "Sell all your items", iAllLore));
     }
 
-    private void sellItems(int amount, PlayerMenuUtility playerMenuUtility) {
+    private void sellItems(int amount, PlayerUtility playerMenuUtility) {
         for (ItemStack item : playerMenuUtility.getPlayer().getInventory().getContents()) {
             if (amount <= 0) break;
 

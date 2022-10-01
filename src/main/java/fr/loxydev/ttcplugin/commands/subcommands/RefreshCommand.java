@@ -22,6 +22,6 @@ public class RefreshCommand extends SubCommand {
 
     @Override
     public void perform(Player player, String[] args) {
-        TheTerrierCityPlugin.getPlayerMenuUtility(player).getScoreboard().update();
+        TheTerrierCityPlugin.getPlayerUtility(player).getScoreboard().update();
     }
 }
