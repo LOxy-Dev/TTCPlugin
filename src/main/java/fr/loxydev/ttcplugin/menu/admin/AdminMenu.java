@@ -43,6 +43,9 @@ public class AdminMenu extends Menu {
         // Manage Teams
         inventory.setItem(1, makeItem(Material.RED_BED, "Manage teams"));
 
+        // Info to remember
+        inventory.setItem(17, makeItem(Material.LEATHER_BOOTS, "Jump: 9000 50 0"));
+
         setFillerGlass();
     }
 }
