@@ -13,8 +13,9 @@ public class PlayerJoinLeaveListeners implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        player.setDisplayName(TheTerrierCityPlugin.getPlayerUtility(player).getTeam().getColor() + player.getName());
 
-        event.setJoinMessage("[" + ChatColor.GREEN + "+" + ChatColor.RESET + "] " + ChatColor.ITALIC + ChatColor.BOLD + player.getName());
+        event.setJoinMessage("[" + ChatColor.GREEN + "+" + ChatColor.RESET + "] " + ChatColor.ITALIC + ChatColor.BOLD + player.getDisplayName());
 
         // Every time a player joins, assign them a personal MenuUtility object
         TheTerrierCityPlugin.getPlayerUtility(player);
@@ -24,7 +25,7 @@ public class PlayerJoinLeaveListeners implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        event.setQuitMessage("[" + ChatColor.DARK_RED + "-" + ChatColor.RESET + "] " + ChatColor.ITALIC + ChatColor.BOLD + player.getName());
+        event.setQuitMessage("[" + ChatColor.DARK_RED + "-" + ChatColor.RESET + "] " + ChatColor.ITALIC + ChatColor.BOLD + player.getDisplayName());
 
         // Since the player left, get rid of the ShopManagerMenu objects for that player
         if (TheTerrierCityPlugin.playerList.containsKey(player))
