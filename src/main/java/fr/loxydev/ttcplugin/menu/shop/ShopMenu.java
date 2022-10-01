@@ -33,17 +33,17 @@ public class ShopMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e, PlayerUtility playerMenuUtility) {
+    public void handleMenu(InventoryClickEvent e, PlayerUtility playerUtility) {
         if (e.getCurrentItem() == FILLER_GLASS || e.getCurrentItem() == null) return;
 
-        Player player = playerMenuUtility.getPlayer();
+        Player player = playerUtility.getPlayer();
         ItemDataHandler item = itemsData.get(e.getSlot());
-        if (playerMenuUtility.hasItem(item.getMaterial()))
+        if (playerUtility.hasItem(item.getMaterial()))
             new ItemInterfaceMenu(item).open(player); // If pagination of shop is modified, index of document has to be updated
     }
 
     @Override
-    public void setMenuItems(PlayerUtility playerMenuUtility) {
+    public void setMenuItems(PlayerUtility playerUtility) {
         // Query and store Shop info
         shopData.update();
         List<String> itemList = shopData.getItemList();
@@ -71,11 +71,11 @@ public class ShopMenu extends Menu {
             itemLore.add(nextLevelIn + " until next price update");
             itemLore.add("\n");
             int inInventory = 0;
-            for (ItemStack item : playerMenuUtility.getPlayer().getInventory().getContents())
+            for (ItemStack item : playerUtility.getPlayer().getInventory().getContents())
                 if (item != null) if (item.getType() == Material.getMaterial(material)) inInventory += item.getAmount();
             itemLore.add(inInventory + " in you inventory");
 
-            inventory.setItem(i, playerMenuUtility.makeItem(Material.getMaterial(material), itemLore));
+            inventory.setItem(i, playerUtility.makeItem(Material.getMaterial(material), itemLore));
         }
     }
 }

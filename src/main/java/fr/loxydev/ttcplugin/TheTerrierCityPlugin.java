@@ -54,12 +54,12 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
     }
 
     public static PlayerUtility getPlayerUtility(Player p) {
-        PlayerUtility playerMenuUtility;
+        PlayerUtility playerUtility;
         if (!(TheTerrierCityPlugin.playerList.containsKey(p))) {
-            playerMenuUtility = new PlayerUtility(p);
-            TheTerrierCityPlugin.playerList.put(p, playerMenuUtility);
+            playerUtility = new PlayerUtility(p);
+            TheTerrierCityPlugin.playerList.put(p, playerUtility);
 
-            return playerMenuUtility;
+            return playerUtility;
         } else {
             return TheTerrierCityPlugin.playerList.get(p);
         }

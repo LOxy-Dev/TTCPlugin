@@ -20,15 +20,15 @@ public class PlayerSettingsAdminMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e, PlayerUtility playerMenuUtility) {
-        Player p = playerMenuUtility.getPlayer();
+    public void handleMenu(InventoryClickEvent e, PlayerUtility playerUtility) {
+        Player p = playerUtility.getPlayer();
         if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
             new ManagePlayerAdminMenu().open(p);
         }
     }
 
     @Override
-    public void setMenuItems(PlayerUtility playerMenuUtility) {
+    public void setMenuItems(PlayerUtility playerUtility) {
         ItemStack back = makeItem(Material.BARRIER, ChatColor.RED + "Back");
 
         inventory.setItem(22, back);

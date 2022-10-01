@@ -19,10 +19,10 @@ public class AdminMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e, PlayerUtility playerMenuUtility) {
+    public void handleMenu(InventoryClickEvent e, PlayerUtility playerUtility) {
         if (e.getCurrentItem() == FILLER_GLASS || e.getCurrentItem() == null) return;
 
-        Player player = playerMenuUtility.getPlayer();
+        Player player = playerUtility.getPlayer();
 
         if (e.getCurrentItem().getType() == Material.BARRIER) player.closeInventory();
 
@@ -30,12 +30,12 @@ public class AdminMenu extends Menu {
 
         if (e.getCurrentItem().getType() == Material.RED_BED) /* TODO proper admin management*/ {
             TeamDataHandler admTeam = new TeamDataHandler("AdminTeam");
-            admTeam.addPlayer(playerMenuUtility);
+            admTeam.addPlayer(playerUtility);
         }
     }
 
     @Override
-    public void setMenuItems(PlayerUtility playerMenuUtility) {
+    public void setMenuItems(PlayerUtility playerUtility) {
         // Close menu Item
         inventory.setItem(22, makeItem(Material.BARRIER, "Close menu"));
         // Spawn NPC Item

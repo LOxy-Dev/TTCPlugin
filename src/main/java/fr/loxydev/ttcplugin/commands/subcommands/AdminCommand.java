@@ -26,7 +26,7 @@ public class AdminCommand extends SubCommand {
     @Override
     public void perform(Player player, String[] args) {
         if (player.hasPermission("ttc.admin")) {
-            PlayerUtility playerMenuUtility = TheTerrierCityPlugin.getPlayerUtility(player);
+            PlayerUtility playerUtility = TheTerrierCityPlugin.getPlayerUtility(player);
 
             new AdminMenu().open(player);
         } else {

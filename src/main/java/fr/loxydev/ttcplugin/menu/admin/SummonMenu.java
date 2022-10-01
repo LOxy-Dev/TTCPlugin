@@ -22,9 +22,9 @@ public class SummonMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e, PlayerUtility playerMenuUtility) {
+    public void handleMenu(InventoryClickEvent e, PlayerUtility playerUtility) {
         String shopName;
-        Player p = playerMenuUtility.getPlayer();
+        Player p = playerUtility.getPlayer();
         switch (e.getSlot()) {
             case 0 -> shopName = "Trash";
             case 1 -> shopName = "Culture";
@@ -45,7 +45,7 @@ public class SummonMenu extends Menu {
     }
 
     @Override
-    public void setMenuItems(PlayerUtility playerMenuUtility) {
+    public void setMenuItems(PlayerUtility playerUtility) {
         inventory.setItem(0, makeItem(Material.DIRT, "Trash Shopkeeper"));
         inventory.setItem(1, makeItem(Material.WHEAT, "Culture Shopkeeper"));
         inventory.setItem(2, makeItem(Material.IRON_ORE, "Material Shopkeeper"));

@@ -16,12 +16,12 @@ public class ManagePlayerAdminMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e, PlayerUtility playerMenuUtility) {
+    public void handleMenu(InventoryClickEvent e, PlayerUtility playerUtility) {
 
     }
 
     @Override
-    public void setMenuItems(PlayerUtility playerMenuUtility) {
+    public void setMenuItems(PlayerUtility playerUtility) {
 
     }
 }
