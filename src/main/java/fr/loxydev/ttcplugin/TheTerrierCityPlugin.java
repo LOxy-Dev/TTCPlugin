@@ -3,6 +3,7 @@ package fr.loxydev.ttcplugin;
 import com.mongodb.client.MongoDatabase;
 import fr.loxydev.ttcplugin.commands.CommandManager;
 import fr.loxydev.ttcplugin.database.DataHandler;
+import fr.loxydev.ttcplugin.listeners.ElevatorListener;
 import fr.loxydev.ttcplugin.listeners.PlayerJoinLeaveListeners;
 import fr.loxydev.ttcplugin.listeners.MenuListener;
 import fr.loxydev.ttcplugin.menu.Menu;
@@ -38,6 +39,7 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
         // Register listeners
         getServer().getPluginManager().registerEvents(new PlayerJoinLeaveListeners(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
+        getServer().getPluginManager().registerEvents(new ElevatorListener(), this);
     }
 
     @Override
