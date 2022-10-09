@@ -137,7 +137,7 @@ public class ItemInterfaceMenu extends Menu {
 
         itemData.increaseSales(amount);
 
-        ShopDataHandler shopData = new ShopDataHandler(itemData.getShopName());
+        ShopDataHandler shopData = new ShopDataHandler(itemData.getShopId());
         shopData.increasePurchases(amount);
 
         playerUtility.getScoreboard().update();

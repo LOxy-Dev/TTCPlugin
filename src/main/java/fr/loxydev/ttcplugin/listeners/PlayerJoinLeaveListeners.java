@@ -13,6 +13,7 @@ public class PlayerJoinLeaveListeners implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+
         player.setDisplayName(TheTerrierCityPlugin.getPlayerUtility(player).getTeam().getColor() + player.getName());
 
         event.setJoinMessage("[" + ChatColor.GREEN + "+" + ChatColor.RESET + "] " + ChatColor.ITALIC + ChatColor.BOLD + player.getDisplayName());
@@ -28,7 +29,6 @@ public class PlayerJoinLeaveListeners implements Listener {
         event.setQuitMessage("[" + ChatColor.DARK_RED + "-" + ChatColor.RESET + "] " + ChatColor.ITALIC + ChatColor.BOLD + player.getDisplayName());
 
         // Since the player left, get rid of the ShopManagerMenu objects for that player
-        if (TheTerrierCityPlugin.playerList.containsKey(player))
-            TheTerrierCityPlugin.playerList.remove(player);
+        TheTerrierCityPlugin.playerList.remove(player);
     }
 }

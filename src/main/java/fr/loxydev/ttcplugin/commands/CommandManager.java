@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class CommandManager implements CommandExecutor {
 
-    private ArrayList<SubCommand> subcommands = new ArrayList<>();
+    private final ArrayList<SubCommand> subcommands = new ArrayList<>();
 
     public CommandManager() {
         // Add subcommands here

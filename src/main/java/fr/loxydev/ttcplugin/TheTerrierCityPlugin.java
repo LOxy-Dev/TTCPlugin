@@ -1,26 +1,24 @@
 package fr.loxydev.ttcplugin;
 
-import com.mongodb.client.MongoDatabase;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import fr.loxydev.ttcplugin.commands.CommandManager;
 import fr.loxydev.ttcplugin.database.DataHandler;
+import fr.loxydev.ttcplugin.database.DbCredentials;
 import fr.loxydev.ttcplugin.listeners.ElevatorListener;
 import fr.loxydev.ttcplugin.listeners.PlayerJoinLeaveListeners;
 import fr.loxydev.ttcplugin.listeners.MenuListener;
-import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public final class TheTerrierCityPlugin extends JavaPlugin {
 
     private static TheTerrierCityPlugin plugin;
-
-    private static ArrayList<Menu> LIST_OF_MENUS;
+    public static MysqlDataSource dataSource;
     public static HashMap<Player, PlayerUtility> playerList = new HashMap<>();
-    public static MongoDatabase database;
 
     @Override
     public void onEnable() {
@@ -30,8 +28,12 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
 
-        // Connect to and initialize MongoDB
-        database = DataHandler.connect();
+        // Connect to and initialize MySQL
+        try {
+            dataSource = DataHandler.connect(new DbCredentials(getConfig().getString("dbh"), getConfig().getInt("dbp"), getConfig().getString("dbn"), getConfig().getString("dbu"), getConfig().getString("dbpwd")));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         // Register the command manager
         getCommand("ttc").setExecutor(new CommandManager());
@@ -49,10 +51,6 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
 
     public static TheTerrierCityPlugin getPlugin() {
         return plugin;
-    }
-
-    public static ArrayList<Menu> getListOfMenus() {
-        return LIST_OF_MENUS;
     }
 
     public static PlayerUtility getPlayerUtility(Player p) {

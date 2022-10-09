@@ -8,18 +8,15 @@ import java.util.ArrayList;
 
 public class Team {
 
+    private final int id;
     private final String name;
+    private ArrayList<PlayerDataHandler> players;
     private ChatColor color;
 
-    private ArrayList<PlayerDataHandler> players = new ArrayList<>();
     private int points;
 
-    public Team(String name) {
-        this.name = name;
-        calculatePoints();
-    }
-
-    public Team(String name, ChatColor color, ArrayList<PlayerDataHandler> players) {
+    public Team(int id, String name, ChatColor color, ArrayList<PlayerDataHandler> players) {
+        this.id = id;
         this.name = name;
         this.color = color;
         this.players = players;
@@ -28,11 +25,13 @@ public class Team {
     }
 
     public void calculatePoints() {
-        points = 0;
-        for (PlayerDataHandler player : players) {
-            player.update();
-            points += player.getPointsAmount();
+        int score = 0;
+
+        for (PlayerDataHandler p : players) {
+            score += p.getPointsAmount();
         }
+
+        this.points = score;
     }
 
     public String getName() {
@@ -58,7 +57,7 @@ public class Team {
     }
 
     public void removePlayer(PlayerUtility player) {
-        players.remove(player);
+        players.remove(player.getPlayerData());
     }
 
     public void setColor(ChatColor color) {

@@ -4,22 +4,20 @@ import fr.loxydev.ttcplugin.database.ItemDataHandler;
 import fr.loxydev.ttcplugin.database.ShopDataHandler;
 import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.utils.PlayerUtility;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ShopMenu extends Menu {
 
-    private ArrayList<ItemDataHandler> itemsData = new ArrayList<>();
-    private ShopDataHandler shopData;
+    private final ArrayList<ItemDataHandler> itemsData = new ArrayList<>();
+    private final ShopDataHandler shopData;
 
-    public ShopMenu(String shopName) {
-        this.shopData = new ShopDataHandler(shopName);
+    public ShopMenu(int shopId) {
+        this.shopData = new ShopDataHandler(shopId);
     }
 
     @Override
@@ -45,18 +43,12 @@ public class ShopMenu extends Menu {
     @Override
     public void setMenuItems(PlayerUtility playerUtility) {
         // Query and store Shop info
-        shopData.update();
-        List<String> itemList = shopData.getItemList();
+        ArrayList<Material> itemList = shopData.getItemList();
 
         for (int i = 0; i < itemList.size(); i++) {
-            String material = itemList.get(i);
+            Material material = itemList.get(i);
 
             ItemDataHandler itemData = new ItemDataHandler(material);
-
-            if (itemData.isNull()) {
-                Bukkit.getLogger().info("No " + material + " entry in item database.");
-                continue;
-            }
 
             // Store item data's Document
             itemsData.add(itemData);
@@ -72,10 +64,10 @@ public class ShopMenu extends Menu {
             itemLore.add("\n");
             int inInventory = 0;
             for (ItemStack item : playerUtility.getPlayer().getInventory().getContents())
-                if (item != null) if (item.getType() == Material.getMaterial(material)) inInventory += item.getAmount();
+                if (item != null) if (item.getType() == material) inInventory += item.getAmount();
             itemLore.add(inInventory + " in you inventory");
 
-            inventory.setItem(i, playerUtility.makeItem(Material.getMaterial(material), itemLore));
+            inventory.setItem(i, playerUtility.makeItem(material, itemLore));
         }
     }
 }

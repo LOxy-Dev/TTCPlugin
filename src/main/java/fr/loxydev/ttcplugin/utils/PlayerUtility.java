@@ -31,8 +31,9 @@ public class PlayerUtility {
         this.p = p;
         this.playerData = new PlayerDataHandler(p.getUniqueId());
 
-        if (playerData.isNull())
+        if (!playerData.exists()) {
             PlayerDataHandler.createPlayerData(p);
+        }
 
         this.team = playerData.getTeam();
         pBoard = new PlayerScoreboard(this);

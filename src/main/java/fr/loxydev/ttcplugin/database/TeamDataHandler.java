@@ -1,106 +1,122 @@
 package fr.loxydev.ttcplugin.database;
 
+import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
 import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import fr.loxydev.ttcplugin.team.Team;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class TeamDataHandler extends DataHandler {
 
     Team team;
 
-    public TeamDataHandler(Team team) {
-        this.team = team;
-        this.collectionName = team.getName();
+    public TeamDataHandler(int teamID) {
+        this.table = "teams";
+        this.prim_key = "name";
+        this.prim_key_value = teamID;
 
-        this.collection = getCollection("teams");
-        this.nameField = "name";
-        update();
+        this.team = new Team(teamID, getTeamName(), getColor(), getPlayers());
     }
 
     public TeamDataHandler(String teamName) {
-        this.collectionName = teamName;
-
-        this.collection = getCollection("teams");
-        this.nameField = "name";
-        update();
     }
 
     // Followings methods are used to access data of a team
+    public Team getTeam() {
+        return team;
+    }
+
     public String getTeamName() {
-        return data.getString("name");
+        return getString("name");
     }
 
     public ChatColor getColor() {
-        return ChatColor.getByChar(data.getString("color"));
+        return ChatColor.getByChar(getString("color"));
     }
 
     public int getPoints() {
-        return data.getInteger("points");
+        return getInt("points");
+    }
+
+    public int getEventScore() {
+        return getInt("eventscore");
+    }
+
+    public int getScoreRank() {
+        return getInt("rankscore");
     }
 
     public ArrayList<PlayerDataHandler> getPlayers() {
-        List<UUID> uuids = data.getList("players", UUID.class);
-        ArrayList<PlayerDataHandler> players = new ArrayList<>();
+        try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "SELECT uuid FROM players WHERE team = ?")) {
+            stmt.setObject(1, prim_key_value);
 
-        for (UUID uuid : uuids) {
-            players.add(new PlayerDataHandler(uuid));
+            ResultSet rs = stmt.executeQuery();
+
+            ArrayList<PlayerDataHandler> list = new ArrayList<>();
+
+            while(rs.next()) {
+                list.add(new PlayerDataHandler(Bukkit.getPlayer(UUID.fromString(rs.getString(1))).getUniqueId()));
+            }
+
+            return list;
+        } catch (SQLException e) {
+            Bukkit.getLogger().info("Couldn't retrieve players in team " + getTeamName());
         }
 
-        return players;
+        return null;
     }
 
     // Following methods are used to set data
-    public void setTeamName() {
-        if (team == null) return;
+    public boolean setTeamName() {
+        if (team == null) return false;
 
-        pushUpdate("name", team.getName());
+        return pushUpdate("name", team.getName());
     }
 
-    public void setTeamName(String teamName)
+    public boolean setTeamName(String teamName)
     {
-        this.collectionName = teamName;
-
-        pushUpdate("name", teamName);
+        return pushUpdate("name", teamName);
     }
 
-    public void setColor(ChatColor color) {
-        setColor(color.toString());
+    public boolean setColor(ChatColor color) {
+        return setColor(color.toString());
     }
 
-    public void setColor(String color) {
-        pushUpdate("color", color);
+    public boolean setColor(String color) {
+        return pushUpdate("color", color);
     }
 
-    public void setPoints(int points) {
-        pushUpdate("points", points);
+    public boolean setPoints(int points) {
+        return pushUpdate("points", points);
     }
 
-    public void setPlayers(ArrayList<PlayerUtility> players) {
+    public boolean setPlayers(ArrayList<PlayerUtility> players) {
         ArrayList<UUID> uuids = new ArrayList<>();
         for (PlayerUtility player : players)
             uuids.add(player.getPlayer().getUniqueId());
 
-        pushUpdate("players", players);
+        return pushUpdate("players", players);
     }
 
-    public void addPlayer(PlayerUtility player) {
-        update();
+    public boolean addPlayer(PlayerUtility player) {
         ArrayList<PlayerDataHandler> players = getPlayers();
         players.add(player.getPlayerData());
-
 
         ArrayList<UUID> uuids = new ArrayList<>();
         for (PlayerDataHandler p : getPlayers())
             uuids.add(p.getUuid());
-        pushUpdate("players", uuids);
+        return pushUpdate("players", uuids);
     }
 
-    public void removePlayer(PlayerUtility player) {
-        update();
+    public boolean removePlayer(PlayerUtility player) {
         ArrayList<PlayerDataHandler> players = getPlayers();
         players.remove(player.getPlayerData());
 
@@ -108,6 +124,6 @@ public class TeamDataHandler extends DataHandler {
         for (PlayerDataHandler p : players)
             uuids.add(p.getUuid());
 
-        pushUpdate("players", uuids);
+        return pushUpdate("players", uuids);
     }
 }

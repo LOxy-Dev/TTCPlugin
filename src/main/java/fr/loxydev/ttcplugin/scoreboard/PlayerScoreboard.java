@@ -50,7 +50,6 @@ public class PlayerScoreboard {
         board.resetScores(lastScores[0]);
         board.resetScores(lastScores[1]);
 
-        playerData.update();
         lastScores = new String[]{" > " + ChatColor.AQUA + playerData.getPointsAmount() + " points", " > " + ChatColor.AQUA + playerData.getTeam().getPoints() + " points "};
         obj.getScore(lastScores[0]).setScore(-4);
         obj.getScore(lastScores[1]).setScore(-7);

@@ -1,13 +1,14 @@
 package fr.loxydev.ttcplugin.database;
 
-import com.mongodb.MongoException;
 import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
 import fr.loxydev.ttcplugin.team.Team;
-import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Objects;
 import java.util.UUID;
 
 public class PlayerDataHandler extends DataHandler {
@@ -16,24 +17,26 @@ public class PlayerDataHandler extends DataHandler {
 
     public PlayerDataHandler(UUID uuid) {
         this.uuid = uuid;
-        collectionName = uuid;
 
-        this.collection = getCollection("playersdata");
-        this.nameField = "uuid";
-        update();
+        this.table = "players";
+        this.prim_key = "uuid";
+        this.prim_key_value = uuid.toString();
     }
 
-    public static void createPlayerData(Player p) {
-        try {
-            TheTerrierCityPlugin.database.getCollection("playersdata").insertOne(new Document()
-                .append("_id", new ObjectId())
-                .append("uuid", p.getUniqueId())
-                .append("name", p.getDisplayName())
-                .append("points", 0)
-                .append("team", "default"));
-        } catch (MongoException me) {
-            System.err.println("Unable to insert due to an error: " + me);
+    public static boolean createPlayerData(Player p) {
+        try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "INSERT INTO `players` (uuid, name, team) VALUES (?, ?, ?)")) {
+            stmt.setString(1, p.getUniqueId().toString());
+            stmt.setString(2, p.getName());
+            stmt.setInt(3, 0);
+
+            stmt.execute();
+            return true;
+        } catch (SQLException e) {
+            Bukkit.getLogger().info("Could not insert player " + p.getName() + " in database.");
         }
+
+        return false;
     }
 
     // Following methods are used to access database fields of a player
@@ -41,34 +44,26 @@ public class PlayerDataHandler extends DataHandler {
         return uuid;
     }
 
-    @Override
-    protected String getObjectName() {
-        return getPlayerName();
-    }
-
     public String getPlayerName() {
-        return data.getString("name");
+        return getString("name");
     }
 
     public int getPointsAmount() {
-        return data.getInteger("points");
+        return getInt("points");
     }
 
     public Team getTeam() {
-        TeamDataHandler teamData = new TeamDataHandler(data.getString("team"));
-
-        return new Team(teamData.getTeamName(), teamData.getColor(), teamData.getPlayers());
+        return new TeamDataHandler(getInt("team")).getTeam();
     }
 
     // The followings methods are used to set database fields
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
-
         pushUpdate("uuid", uuid);
     }
 
     public void setPlayerName() {
-        pushUpdate("name", Bukkit.getPlayer(this.uuid));
+        setPlayerName((Objects.requireNonNull(Bukkit.getPlayer(this.uuid))).getName());
     }
 
     public void setPlayerName(String name) {
@@ -83,11 +78,7 @@ public class PlayerDataHandler extends DataHandler {
         setPointsAmount(getPointsAmount() + amount);
     }
 
-    public void setTeam(Team team) {
-        pushUpdate("team", team.getName());
-    }
-
-    public void setTeam(String teamName) {
-        pushUpdate("team", teamName);
+    public void setTeam(int teamId) {
+        pushUpdate("team", teamId);
     }
 }

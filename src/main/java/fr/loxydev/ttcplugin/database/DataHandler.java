@@ -1,67 +1,109 @@
 package fr.loxydev.ttcplugin.database;
 
-import com.mongodb.MongoException;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Updates;
+import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
-import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
 
-import static com.mongodb.client.model.Filters.*;
+import java.sql.*;
 
 public abstract class DataHandler {
 
-    protected static MongoClient mongoClient;
-    protected MongoCollection<Document> collection;
-    protected String nameField;
-    protected Object collectionName;
-    protected Document data;
+    protected String table;
+    protected String prim_key;
+    protected Object prim_key_value;
 
-    public static MongoDatabase connect(String uri) {
-        try {
-            mongoClient = MongoClients.create(uri);
-            return mongoClient.getDatabase("ttc_dataset");
-        } catch (MongoException e) {
-            Bukkit.getLogger().info("Failed to connect to MongoDB.");
+    public static MysqlDataSource connect(DbCredentials credentials) throws SQLException {
+        MysqlDataSource dataSource = new MysqlConnectionPoolDataSource();
 
-            return null;
+        assert credentials != null;
+        dataSource.setServerName(credentials.getHost());
+        dataSource.setPortNumber(credentials.getPort());
+        dataSource.setDatabaseName(credentials.getDatabase());
+        dataSource.setUser(credentials.getUser());
+        dataSource.setPassword(credentials.getPassword());
+
+        try (Connection conn = dataSource.getConnection()) {
+            if (!conn.isValid(1)) {
+                throw new SQLException("Could not establish database connection.");
+            }
         }
+
+        return dataSource;
     }
 
-    public static MongoDatabase connect() {
-        return connect(TheTerrierCityPlugin.getPlugin().getConfig().getString("mongo_connect"));
-    }
+    public String getString(String col) {
+        try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "SELECT " + col + " FROM " + table + " WHERE " + prim_key + " = ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            stmt.setObject(1, prim_key_value);
 
-    protected MongoCollection<Document> getCollection(String name) {
-        return TheTerrierCityPlugin.database.getCollection(name);
-    }
-
-    public void update() {
-        data = collection.find(eq(nameField, collectionName)).first();
-    }
-
-    protected String getObjectName() {
-        return collectionName.toString();
-    }
-
-    public void pushUpdates(Bson updates) {
-        try {
-            collection.updateOne(data, updates);
-            update();
-        } catch (MongoException me) {
-            Bukkit.getLogger().info("Unable to update " + getObjectName() + " data due to an error: " + me);
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.first()) {
+                return resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+            Bukkit.getLogger().info("Could not retrieve data from " + table + ": " + prim_key_value.toString());
         }
+        return null;
     }
 
-    public void pushUpdate(String field, Object value) {
-        pushUpdates(Updates.set(field, value));
+    public int getInt(String col) {
+        try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "SELECT " + col + " FROM " + table + " WHERE " + prim_key + " = ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            stmt.setObject(1, prim_key_value);
+
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.first()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            Bukkit.getLogger().info("Could not retrieve data from " + table + ": " + prim_key_value.toString());
+        }
+        return -1;
     }
 
-    public boolean isNull() {
-        return data == null;
+    public boolean getBoolean(String col) {
+        try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "SELECT " + col + " FROM " + table + " WHERE " + prim_key + " = ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            stmt.setObject(1, prim_key_value);
+
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.first()) {
+                return resultSet.getBoolean(1);
+            }
+        } catch (SQLException e) {
+            Bukkit.getLogger().info("Could not retrieve data from " + table + ": " + prim_key_value.toString());
+        }
+
+        return false; // May find a better way to exit in case of error...
+    }
+
+    public boolean pushUpdate(String field, Object value) {
+        try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "UPDATE " + table + " SET " + field + " = ? WHERE " + prim_key + " = ?")) {
+            stmt.setObject(1, value);
+            stmt.setObject(2, prim_key_value);
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            Bukkit.getLogger().info("Could not push update of " + table + ": " + prim_key_value.toString());
+        }
+        return false;
+    }
+
+    public boolean exists() {
+        try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "SELECT 1 FROM " + table + " WHERE " + prim_key + " = ?"
+        )) {
+            stmt.setObject(1, prim_key_value);
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+            Bukkit.getLogger().info(e.toString());
+        }
+
+        return false;
     }
 }
