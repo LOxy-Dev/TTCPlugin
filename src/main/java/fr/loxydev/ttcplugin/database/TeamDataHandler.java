@@ -22,7 +22,7 @@ public class TeamDataHandler extends DataHandler {
         this.prim_key = "name";
         this.prim_key_value = teamID;
 
-        this.team = new Team(teamID, getTeamName(), getColor(), getPlayers());
+        this.team = new Team(teamID, getTeamName(), getTag(), getColor(), getPlayers());
     }
 
     public TeamDataHandler(String teamName) {
@@ -35,6 +35,10 @@ public class TeamDataHandler extends DataHandler {
 
     public String getTeamName() {
         return getString("name");
+    }
+
+    public String getTag() {
+        return getString("tag");
     }
 
     public ChatColor getColor() {

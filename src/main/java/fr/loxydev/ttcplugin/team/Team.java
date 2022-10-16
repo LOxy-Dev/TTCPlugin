@@ -10,14 +10,16 @@ public class Team {
 
     private final int id;
     private final String name;
-    private ArrayList<PlayerDataHandler> players;
+    private final String tag;
     private ChatColor color;
+    private ArrayList<PlayerDataHandler> players;
 
     private int points;
 
-    public Team(int id, String name, ChatColor color, ArrayList<PlayerDataHandler> players) {
+    public Team(int id, String name, String tag, ChatColor color, ArrayList<PlayerDataHandler> players) {
         this.id = id;
         this.name = name;
+        this.tag = tag;
         this.color = color;
         this.players = players;
 
@@ -36,6 +38,10 @@ public class Team {
 
     public String getName() {
         return this.name;
+    }
+
+    public String getTag() {
+        return this.tag;
     }
 
     public ChatColor getColor() {

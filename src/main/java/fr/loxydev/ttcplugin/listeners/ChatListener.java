@@ -1,14 +1,16 @@
 package fr.loxydev.ttcplugin.listeners;
 
 import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
+import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerJoinLeaveListeners implements Listener {
+public class ChatListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -30,5 +32,14 @@ public class PlayerJoinLeaveListeners implements Listener {
 
         // Since the player left, get rid of the ShopManagerMenu objects for that player
         TheTerrierCityPlugin.playerList.remove(player);
+    }
+
+    @EventHandler
+    public void onChat(AsyncPlayerChatEvent event) {
+        PlayerUtility player = TheTerrierCityPlugin.getPlayerUtility(event.getPlayer());
+
+        String prefix = player.getTeam().getColor() + "" + ChatColor.BOLD + player.getTeam().getTag() + ChatColor.RESET + "> ";
+
+        event.setFormat(prefix + event.getPlayer().getName() + ": " + event.getMessage());
     }
 }
