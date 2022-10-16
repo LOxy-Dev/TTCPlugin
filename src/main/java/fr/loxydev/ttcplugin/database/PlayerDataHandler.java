@@ -52,6 +52,10 @@ public class PlayerDataHandler extends DataHandler {
         return getInt("points");
     }
 
+    public int getHeads() {
+        return getInt("heads");
+    }
+
     public Team getTeam() {
         return new TeamDataHandler(getInt("team")).getTeam();
     }
@@ -80,5 +84,9 @@ public class PlayerDataHandler extends DataHandler {
 
     public void setTeam(int teamId) {
         pushUpdate("team", teamId);
+    }
+
+    public void increaseHeads() {
+        pushUpdate("heads", getHeads() + 1);
     }
 }

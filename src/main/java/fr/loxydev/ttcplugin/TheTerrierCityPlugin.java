@@ -5,6 +5,7 @@ import fr.loxydev.ttcplugin.commands.CommandManager;
 import fr.loxydev.ttcplugin.database.DataHandler;
 import fr.loxydev.ttcplugin.database.DbCredentials;
 import fr.loxydev.ttcplugin.listeners.ElevatorListener;
+import fr.loxydev.ttcplugin.listeners.HeadHuntListener;
 import fr.loxydev.ttcplugin.listeners.PlayerJoinLeaveListeners;
 import fr.loxydev.ttcplugin.listeners.MenuListener;
 import fr.loxydev.ttcplugin.utils.PlayerUtility;
@@ -42,6 +43,7 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinLeaveListeners(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
         getServer().getPluginManager().registerEvents(new ElevatorListener(), this);
+        getServer().getPluginManager().registerEvents(new HeadHuntListener(), this);
     }
 
     @Override
