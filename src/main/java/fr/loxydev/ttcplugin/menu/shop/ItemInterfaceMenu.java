@@ -113,32 +113,35 @@ public class ItemInterfaceMenu extends Menu {
     }
 
     private void sellItems(int amount, PlayerUtility playerUtility) {
+        int sold = 0;
         for (ItemStack item : playerUtility.getPlayer().getInventory().getContents()) {
             if (amount <= 0) break;
 
             if (item != null) if (item.getType() == itemData.getMaterial()) {
                 if (item.getAmount() >= amount) { // If there is enough item to delete in the slot
                     item.setAmount(item.getAmount()-amount);
+                    sold += amount;
                     break;
                 }
                 else {
                     amount -= item.getAmount();
+                    sold += item.getAmount();
                     item.setAmount(0);
                 }
             }
         }
 
-        int totalSale = amount * itemData.getPrice();
+        int totalSale = sold * itemData.getPrice();
 
         PlayerDataHandler playerData = playerUtility.getPlayerData();
         playerData.addPoints(totalSale);
-        playerUtility.getPlayer().sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "[TTC] You sold " + amount + " " + itemData.getItemName() + " for " + totalSale + " points.");
+        playerUtility.getPlayer().sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "[TTC] You sold " + sold + " " + itemData.getItemName() + " for " + totalSale + " points.");
         playerUtility.getPlayer().playSound(playerUtility.getPlayer(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
 
-        itemData.increaseSales(amount);
+        itemData.increaseSales(sold);
 
         ShopDataHandler shopData = new ShopDataHandler(itemData.getShopId());
-        shopData.increasePurchases(amount);
+        shopData.increasePurchases(sold);
 
         playerUtility.getScoreboard().update();
     }
