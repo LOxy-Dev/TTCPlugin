@@ -1,13 +1,9 @@
 package fr.loxydev.ttcplugin.listeners;
 
 import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
-import fr.loxydev.ttcplugin.database.DataHandler;
-import fr.loxydev.ttcplugin.database.ItemDataHandler;
-import fr.loxydev.ttcplugin.database.ShopDataHandler;
 import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import fr.loxydev.ttcplugin.menu.shop.ShopMenu;
-import io.github.bananapuncher714.nbteditor.NBTEditor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -28,7 +24,7 @@ public class MenuListener implements Listener {
     public void onNPCClick(PlayerInteractEntityEvent event) {
         Entity entity = event.getRightClicked();
 
-        if (!NBTEditor.getBoolean(entity, "NoAI")) return;
+        if (!entity.isSilent()) return;
 
         Player player = event.getPlayer();
 
