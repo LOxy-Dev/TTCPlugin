@@ -70,23 +70,23 @@ public class PlayerDataHandler extends DataHandler {
         setPlayerName((Objects.requireNonNull(Bukkit.getPlayer(this.uuid))).getName());
     }
 
-    public void setPlayerName(String name) {
-        pushUpdate("name", name);
+    public boolean setPlayerName(String name) {
+        return pushUpdate("name", name);
     }
 
-    public void setPointsAmount(int amount) {
-        pushUpdate("points", amount);
+    public boolean setPointsAmount(int amount) {
+        return pushUpdate("points", amount);
     }
 
-    public void addPoints(int amount) {
-        setPointsAmount(getPointsAmount() + amount);
+    public boolean addPoints(int amount) {
+        return setPointsAmount(getPointsAmount() + amount);
     }
 
-    public void setTeam(int teamId) {
-        pushUpdate("team", teamId);
+    public boolean setTeam(int teamId) {
+        return pushUpdate("team", teamId);
     }
 
-    public void increaseHeads() {
-        pushUpdate("heads", getHeads() + 1);
+    public boolean increaseHeads() {
+        return pushUpdate("heads", getHeads() + 1);
     }
 }

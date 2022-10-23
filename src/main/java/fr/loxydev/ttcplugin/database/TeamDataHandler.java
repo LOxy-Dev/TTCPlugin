@@ -67,7 +67,7 @@ public class TeamDataHandler extends DataHandler {
             ArrayList<PlayerDataHandler> list = new ArrayList<>();
 
             while(rs.next()) {
-                list.add(new PlayerDataHandler(Bukkit.getPlayer(UUID.fromString(rs.getString(1))).getUniqueId()));
+                list.add(new PlayerDataHandler(UUID.fromString(rs.getString(1))));
             }
 
             return list;

@@ -19,6 +19,14 @@ public class FlatDataHandler extends DataHandler {
         this.prim_key_value = id;
     }
 
+    public String getOwner() {
+        return getString("owner");
+    }
+
+    public int getPrice() {
+        return getInt("price");
+    }
+
     public static boolean isTP(Location loc) {
         try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
                 "SELECT flatid FROM flats WHERE (tpInX = ? AND tpInY = ? AND tpInZ = ?) OR (tpOutX = ? AND tpOutY = ? AND tpOutZ = ?)", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
@@ -37,6 +45,10 @@ public class FlatDataHandler extends DataHandler {
         }
 
         return false;
+    }
+
+    public Location getTpCoords() {
+        return new Location(TheTerrierCityPlugin.lobby, getInt("tpInX"), getInt("tpInY"), getInt("tpInZ"));
     }
 
     public static Location getLinkedLoc(Location loc) {
@@ -107,4 +119,27 @@ public class FlatDataHandler extends DataHandler {
         return corners;
     }
 
+    public boolean buy(PlayerUtility player) {
+        // Can't buy if player already owns a flat
+        if (ownsFlat(player) != -1) {
+            return false;
+        }
+
+        // Can't buy if already bought
+        if (getOwner() != null) {
+            return false;
+        }
+
+        // Can't buy if not enough money
+        int price = getPrice();
+        if (player.getPlayerData().getPointsAmount() < price) {
+            return false;
+        }
+
+        // Write data
+        if (pushUpdate("owner", player.getPlayer().getUniqueId().toString()))
+            return player.getPlayerData().addPoints(-1 * getPrice());
+
+        return false;
+    }
 }
