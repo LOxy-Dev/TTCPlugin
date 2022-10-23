@@ -9,6 +9,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
+import java.util.Objects;
+
 public class TeleportListener implements Listener {
 
     @EventHandler
@@ -26,9 +28,19 @@ public class TeleportListener implements Listener {
             return;
         }
 
-        if (FlatDataHandler.isTP(pos.getBlock().getLocation())) {
-            player.teleport(FlatDataHandler.getLinkedLoc(pos));
+        if (FlatDataHandler.isTPIn(pos.getBlock().getLocation())) {
+            if (FlatDataHandler.getFlatDataByTpCoords(pos.getBlock().getLocation()).getOwner() == null) {
+                player.teleport(FlatDataHandler.getLinkedLoc(pos));
+            } else {
+                if (Objects.equals(FlatDataHandler.getFlatDataByTpCoords(pos.getBlock().getLocation()).getOwner(), player.getUniqueId().toString())) {
+                    player.teleport(FlatDataHandler.getLinkedLoc(pos));
+                } else {
+                }
+            }
             return;
+        }
+        if (FlatDataHandler.isTPOut(pos.getBlock().getLocation())) {
+            player.teleport(FlatDataHandler.getLinkedLoc(pos));
         }
     }
 }

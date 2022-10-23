@@ -27,15 +27,12 @@ public class FlatDataHandler extends DataHandler {
         return getInt("price");
     }
 
-    public static boolean isTP(Location loc) {
+    public static boolean isTPIn(Location loc) {
         try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
-                "SELECT flatid FROM flats WHERE (tpInX = ? AND tpInY = ? AND tpInZ = ?) OR (tpOutX = ? AND tpOutY = ? AND tpOutZ = ?)", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+                "SELECT flatid FROM flats WHERE (tpInX = ? AND tpInY = ? AND tpInZ = ?)", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
             stmt.setInt(1, loc.getBlockX());
             stmt.setInt(2, loc.getBlockY());
             stmt.setInt(3, loc.getBlockZ());
-            stmt.setInt(4, loc.getBlockX());
-            stmt.setInt(5, loc.getBlockY());
-            stmt.setInt(6, loc.getBlockZ());
 
             ResultSet rs = stmt.executeQuery();
 
@@ -45,6 +42,39 @@ public class FlatDataHandler extends DataHandler {
         }
 
         return false;
+    }
+    public static boolean isTPOut(Location loc) {
+        try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "SELECT flatid FROM flats WHERE (tpOutX = ? AND tpOutY = ? AND tpOutZ = ?)", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            stmt.setInt(1, loc.getBlockX());
+            stmt.setInt(2, loc.getBlockY());
+            stmt.setInt(3, loc.getBlockZ());
+
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.first();
+        } catch (SQLException e) {
+            Bukkit.getLogger().info("Could not retrieve information about " + loc.toString());
+        }
+
+        return false;
+    }
+
+    public static FlatDataHandler getFlatDataByTpCoords(Location loc) {
+        try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "SELECT flatid FROM flats WHERE (TpInX = ? AND TpInY = ? AND TpInZ = ?)", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            stmt.setInt(1, loc.getBlockX());
+            stmt.setInt(2, loc.getBlockY());
+            stmt.setInt(3, loc.getBlockZ());
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.first())
+                return new FlatDataHandler(rs.getInt(1));
+        } catch (SQLException e) {
+
+        }
+
+        return null;
     }
 
     public Location getTpCoords() {

@@ -9,10 +9,7 @@ import fr.loxydev.ttcplugin.database.PlayerDataHandler;
 import fr.loxydev.ttcplugin.listeners.*;
 import fr.loxydev.ttcplugin.utils.Hologram;
 import fr.loxydev.ttcplugin.utils.PlayerUtility;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -80,8 +77,12 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
                     text.add("À vendre");
                     text.add("Prix: " + flatData.getPrice());
                 } else {
-                    PlayerDataHandler playerData = new PlayerDataHandler(UUID.fromString(flatData.getOwner()));
-                    text.add(playerData.getTeam().getColor() + playerData.getPlayerName());
+                    try {
+                        PlayerDataHandler playerData = new PlayerDataHandler(UUID.fromString(flatData.getOwner()));
+                        text.add(playerData.getTeam().getColor() + playerData.getPlayerName());
+                    } catch (IllegalArgumentException e) {
+                        text.add("§l" + flatData.getOwner());
+                    }
                 }
 
                 holograms.add(new Hologram(loc, text, "flat_" + id));
