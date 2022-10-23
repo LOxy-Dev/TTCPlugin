@@ -2,7 +2,6 @@ package fr.loxydev.ttcplugin.menu.admin;
 
 import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.utils.PlayerUtility;
-import io.github.bananapuncher714.nbteditor.NBTEditor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -41,7 +40,7 @@ public class SummonMenu extends Menu {
         v.setCustomName(shopName);
         v.setSilent(true);
         v.setProfession(Villager.Profession.NITWIT);
-        NBTEditor.set(v, true, "NoAI");
+        v.setAI(false);
     }
 
     @Override
