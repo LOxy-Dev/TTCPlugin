@@ -45,7 +45,7 @@ public class TestCommand extends SubCommand {
             message.add("Here is a §4RED COLOR.");
             message.add("Are the lines correctly spaced???");
             message.add("I hope it works.");
-            Hologram test = new Hologram(player.getLocation(), message);
+            Hologram test = new Hologram(player.getLocation(), message, "test");
 
             Bukkit.getScheduler().runTaskLater(TheTerrierCityPlugin.getPlugin(), new Runnable() {
                 @Override

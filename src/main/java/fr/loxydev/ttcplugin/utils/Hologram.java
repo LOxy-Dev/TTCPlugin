@@ -10,10 +10,12 @@ import java.util.ArrayList;
 
 public class Hologram {
 
+    private final String id;
     private final ArrayList<ArmorStand> armorStands;
     private final Location loc;
 
-    public Hologram(Location loc, ArrayList<String> text) {
+    public Hologram(Location loc, ArrayList<String> text, String id) {
+        this.id = id;
         this.loc = loc;
         this.armorStands = new ArrayList<>();
 
@@ -55,5 +57,9 @@ public class Hologram {
         for (ArmorStand armorStand : armorStands) {
             armorStand.remove();
         }
+    }
+
+    public String getId() {
+        return this.id;
     }
 }
