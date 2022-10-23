@@ -3,12 +3,9 @@ package fr.loxydev.ttcplugin.commands.subcommands;
 import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
 import fr.loxydev.ttcplugin.commands.SubCommand;
 import fr.loxydev.ttcplugin.utils.Hologram;
-import io.github.bananapuncher714.nbteditor.NBTEditor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
 
 import java.util.ArrayList;
 
