@@ -72,7 +72,7 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
                 int id = rs.getInt(1);
                 FlatDataHandler flatData = new FlatDataHandler(id);
                 Location tpLoc = flatData.getTpCoords();
-                Location loc = new Location(tpLoc.getWorld(), tpLoc.getBlockX(), tpLoc.getBlockY(), tpLoc.getBlockZ());
+                Location loc = new Location(tpLoc.getWorld(), tpLoc.getBlockX() + 0.5, tpLoc.getBlockY()- 0.25, tpLoc.getBlockZ() + 0.5);
 
                 ArrayList<String> text = new ArrayList<>();
                 text.add("Appartement §o#" + id);
