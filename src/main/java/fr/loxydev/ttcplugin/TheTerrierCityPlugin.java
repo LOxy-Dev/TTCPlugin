@@ -9,6 +9,8 @@ import fr.loxydev.ttcplugin.listeners.TeleportListener;
 import fr.loxydev.ttcplugin.listeners.HeadHuntListener;
 import fr.loxydev.ttcplugin.listeners.MenuListener;
 import fr.loxydev.ttcplugin.utils.PlayerUtility;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,6 +21,8 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
 
     private static TheTerrierCityPlugin plugin;
     public static MysqlDataSource dataSource;
+    public static World lobby;
+    public static World survival;
     public static HashMap<Player, PlayerUtility> playerList = new HashMap<>();
 
     @Override
@@ -44,6 +48,10 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
         getServer().getPluginManager().registerEvents(new TeleportListener(), this);
         getServer().getPluginManager().registerEvents(new HeadHuntListener(), this);
+
+        // Register the worlds
+        lobby = new WorldCreator("Lobby").createWorld();
+        survival = new WorldCreator("Survival").createWorld();
     }
 
     @Override
