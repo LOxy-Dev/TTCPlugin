@@ -1,5 +1,6 @@
 package fr.loxydev.ttcplugin.listeners;
 
+import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
 import fr.loxydev.ttcplugin.database.FlatDataHandler;
 import fr.loxydev.ttcplugin.menu.standard.ElevatorMenu;
 import org.bukkit.Location;
@@ -17,6 +18,9 @@ public class TeleportListener implements Listener {
         Player player = event.getPlayer();
         Location pos = player.getLocation();
 
+        if (pos.getWorld() != TheTerrierCityPlugin.lobby)
+            return;
+
         if (Math.abs(pos.getBlockX()) <= 1 && Math.abs(pos.getBlockZ()) <= 1) {
             new ElevatorMenu().open(player);
             return;
@@ -24,6 +28,7 @@ public class TeleportListener implements Listener {
 
         if (FlatDataHandler.isTP(pos.getBlock().getLocation())) {
             player.teleport(FlatDataHandler.getLinkedLoc(pos));
+            return;
         }
     }
 }
