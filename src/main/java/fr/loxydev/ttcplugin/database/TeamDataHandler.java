@@ -19,7 +19,7 @@ public class TeamDataHandler extends DataHandler {
 
     public TeamDataHandler(int teamID) {
         this.table = "teams";
-        this.prim_key = "name";
+        this.prim_key = "idteam";
         this.prim_key_value = teamID;
 
         this.team = new Team(teamID, getTeamName(), getTag(), getColor(), getPlayers());

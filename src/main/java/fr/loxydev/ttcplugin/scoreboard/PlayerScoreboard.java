@@ -1,5 +1,6 @@
 package fr.loxydev.ttcplugin.scoreboard;
 
+import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
 import fr.loxydev.ttcplugin.database.PlayerDataHandler;
 import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.Bukkit;
@@ -53,5 +54,8 @@ public class PlayerScoreboard {
         lastScores = new String[]{" > " + ChatColor.AQUA + playerData.getPointsAmount() + " points", " > " + ChatColor.AQUA + playerData.getTeam().getPoints() + " points "};
         obj.getScore(lastScores[0]).setScore(-4);
         obj.getScore(lastScores[1]).setScore(-7);
+
+        playerData.getTeam().updateData();
+        TheTerrierCityPlugin.updateScoreboards();
     }
 }

@@ -1,6 +1,7 @@
 package fr.loxydev.ttcplugin.team;
 
 import fr.loxydev.ttcplugin.database.PlayerDataHandler;
+import fr.loxydev.ttcplugin.database.TeamDataHandler;
 import fr.loxydev.ttcplugin.utils.PlayerUtility;
 import org.bukkit.ChatColor;
 
@@ -34,6 +35,14 @@ public class Team {
         }
 
         this.points = score;
+    }
+
+    public void updateData() {
+        TeamDataHandler data = new TeamDataHandler(id);
+
+        calculatePoints();
+
+        data.setPoints(points);
     }
 
     public String getName() {

@@ -60,6 +60,59 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
         survival = new WorldCreator("Survival").createWorld();
 
         // Add holograms
+        // Add scoreboards
+        // Team ranks
+        try (Connection conn = dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "SELECT name, color, points FROM teams ORDER BY points DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            ResultSet rs = stmt.executeQuery();
+
+            ArrayList<String> content = new ArrayList<>();
+            while (rs.next()) {
+                if (rs.getString(1).equals("Admin Team") || rs.getString(1).equals("Default Team"))
+                    continue;
+
+                String bob = "§" +
+                        rs.getString(2) +
+                        "§l" +
+                        rs.getString(1) +
+                        "§r: " +
+                        rs.getInt(3);
+
+                content.add(bob);
+            }
+            holograms.add(new Hologram(new Location(lobby, -2, 214, 10), content, "teams"));
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe("Couldn't fetch team scoreboard.");
+        }
+
+        // Player Top 5
+        try (Connection conn = dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "SELECT uuid FROM players ORDER BY points DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            ResultSet rs = stmt.executeQuery();
+
+            ArrayList<String> content = new ArrayList<>();
+            int count = 0;
+            while (rs.next() && count < 5) {
+                if (rs.getString(1).equals("4bb38f66-67f4-41f9-b12b-8398367eb7eb"))
+                    continue;
+
+                PlayerDataHandler playerData = new PlayerDataHandler(UUID.fromString(rs.getString(1)));
+
+                String bob = "§" +
+                        playerData.getTeam().getColor().getChar() +
+                        playerData.getPlayerName() +
+                        "§r: " +
+                        playerData.getPointsAmount();
+
+                content.add(bob);
+
+                count++;
+            }
+            holograms.add(new Hologram(new Location(lobby, 4, 214, 10), content, "players"));
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe("Couldn't fetch top 5 players scoreboard.");
+        }
+
         // Flats holograms
         try (Connection conn = dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
                 "SELECT flatid FROM flats;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
@@ -113,6 +166,72 @@ public final class TheTerrierCityPlugin extends JavaPlugin {
             return playerUtility;
         } else {
             return TheTerrierCityPlugin.playerList.get(p);
+        }
+    }
+
+    public static void updateScoreboards() {
+        ArrayList<String> content;
+        // Player Top 5
+        content = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "SELECT uuid FROM players ORDER BY points DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            ResultSet rs = stmt.executeQuery();
+
+            int count = 0;
+            while (rs.next() && count < 5) {
+                if (rs.getString(1).equals("4bb38f66-67f4-41f9-b12b-8398367eb7eb"))
+                    continue;
+
+                PlayerDataHandler playerData = new PlayerDataHandler(UUID.fromString(rs.getString(1)));
+
+                String bob = "§" +
+                        playerData.getTeam().getColor().getChar() +
+                        playerData.getPlayerName() +
+                        "§r: " +
+                        playerData.getPointsAmount();
+
+                content.add(bob);
+
+                count++;
+            }
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe("Couldn't fetch top 5 players scoreboard.");
+        }
+        for (Hologram h : holograms) {
+            if (!h.getId().equals("players"))
+                continue;
+
+            h.updateText(content);
+        }
+
+        // Team ranks
+        content = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                "SELECT name, color, points FROM teams ORDER BY points DESC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                if (rs.getString(1).equals("Admin Team") || rs.getString(1).equals("Default Team"))
+                    continue;
+
+                String bob = "§" +
+                        rs.getString(2) +
+                        "§l" +
+                        rs.getString(1) +
+                        "§r: " +
+                        rs.getInt(3);
+
+                content.add(bob);
+            }
+        } catch (SQLException e) {
+            Bukkit.getLogger().severe("Couldn't fetch team scoreboard.");
+        }
+
+        for (Hologram h : holograms) {
+            if (!h.getId().equals("teams"))
+                continue;
+
+            h.updateText(content);
         }
     }
 }
