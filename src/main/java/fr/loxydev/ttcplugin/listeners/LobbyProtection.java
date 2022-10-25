@@ -84,39 +84,6 @@ public class LobbyProtection implements Listener {
     }
 
     @EventHandler
-    public void onBoatPlace(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-
-        if (player.hasPermission("ttc.admin"))
-            return;
-
-        if (player.getWorld() != TheTerrierCityPlugin.lobby)
-            return;
-
-        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (player.getInventory().getItemInMainHand().getType() == Material.OAK_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.BIRCH_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.SPRUCE_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.JUNGLE_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.ACACIA_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.DARK_OAK_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.MANGROVE_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.OAK_CHEST_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.BIRCH_CHEST_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.SPRUCE_CHEST_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.JUNGLE_CHEST_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.ACACIA_CHEST_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.DARK_OAK_CHEST_BOAT
-                    || player.getInventory().getItemInMainHand().getType() == Material.MANGROVE_CHEST_BOAT) {
-                event.setCancelled(true);
-                return;
-            }
-        }
-
-        event.setCancelled(false);
-    }
-
-    @EventHandler
     public void onEggSpawned(PlayerEggThrowEvent event) {
         if (event.getPlayer().getWorld() != TheTerrierCityPlugin.lobby)
             return;
