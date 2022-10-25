@@ -1,4 +1,4 @@
-package fr.loxydev.ttcplugin.menu.shop;
+package fr.loxydev.ttcplugin.menu.standard.shop;
 
 import fr.loxydev.ttcplugin.database.ItemDataHandler;
 import fr.loxydev.ttcplugin.database.ShopDataHandler;

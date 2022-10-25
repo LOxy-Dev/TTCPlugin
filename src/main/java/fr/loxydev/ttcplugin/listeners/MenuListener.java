@@ -3,7 +3,7 @@ package fr.loxydev.ttcplugin.listeners;
 import fr.loxydev.ttcplugin.TheTerrierCityPlugin;
 import fr.loxydev.ttcplugin.menu.Menu;
 import fr.loxydev.ttcplugin.utils.PlayerUtility;
-import fr.loxydev.ttcplugin.menu.shop.ShopMenu;
+import fr.loxydev.ttcplugin.menu.standard.shop.ShopMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
