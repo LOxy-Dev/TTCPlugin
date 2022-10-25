@@ -17,6 +17,7 @@ public class CommandManager implements CommandExecutor {
         // Add subcommands here
         subcommands.add(new HelpCommand());
         subcommands.add(new AdminCommand());
+        subcommands.add(new CityCommand());
         subcommands.add(new RefreshCommand());
         subcommands.add(new BuyCommand());
         subcommands.add(new SignCommand());

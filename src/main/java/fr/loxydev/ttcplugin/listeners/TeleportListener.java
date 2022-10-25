@@ -23,11 +23,26 @@ public class TeleportListener implements Listener {
         if (pos.getWorld() != TheTerrierCityPlugin.lobby)
             return;
 
+        // Lobby elevator
         if (Math.abs(pos.getBlockX()) <= 1 && Math.abs(pos.getBlockZ()) <= 1) {
             new ElevatorMenu().open(player);
             return;
         }
 
+        // Survival access
+        if (pos.getBlockY() == 65) {
+            // Cardinal pos
+            if ((Math.abs(pos.getBlockX()) == 635 && Math.abs(pos.getBlockZ()) <= 1) || (Math.abs(pos.getBlockX()) <= 1 && Math.abs(pos.getBlockZ()) == 635)) {
+                player.teleport(new Location(TheTerrierCityPlugin.survival, 0, 69, 25));
+                return;
+            }
+            if ((Math.abs(pos.getBlockX()) >= 450 && Math.abs(pos.getBlockX()) <= 451) && (Math.abs(pos.getBlockZ()) >= 450 && Math.abs(pos.getBlockZ()) <= 451)) {
+                player.teleport(new Location(TheTerrierCityPlugin.survival, 0, 69, 25));
+                return;
+            }
+        }
+
+        // Flat management
         if (FlatDataHandler.isTPIn(pos.getBlock().getLocation())) {
             if (FlatDataHandler.getFlatDataByTpCoords(pos.getBlock().getLocation()).getOwner() == null) {
                 player.teleport(FlatDataHandler.getLinkedLoc(pos));
