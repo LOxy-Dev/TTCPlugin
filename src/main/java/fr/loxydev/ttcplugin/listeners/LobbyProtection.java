@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -130,6 +131,14 @@ public class LobbyProtection implements Listener {
 
     @EventHandler
     public void onExplosion(ExplosionPrimeEvent event) {
+        if (event.getEntity().getWorld() != TheTerrierCityPlugin.lobby)
+            return;
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onItemFrameInteract(EntityDamageByEntityEvent event) {
         if (event.getEntity().getWorld() != TheTerrierCityPlugin.lobby)
             return;
 
