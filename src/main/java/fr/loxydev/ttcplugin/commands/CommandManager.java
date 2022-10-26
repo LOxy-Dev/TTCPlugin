@@ -16,11 +16,12 @@ public class CommandManager implements CommandExecutor {
     public CommandManager() {
         // Add subcommands here
         subcommands.add(new HelpCommand());
-        subcommands.add(new AdminCommand());
         subcommands.add(new CityCommand());
         subcommands.add(new RefreshCommand());
         subcommands.add(new BuyCommand());
+        subcommands.add(new AdminCommand());
         subcommands.add(new SignCommand());
+        subcommands.add(new AddCommand());
         subcommands.add(new TestCommand());
     }
 
