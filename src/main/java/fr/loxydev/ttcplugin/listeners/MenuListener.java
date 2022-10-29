@@ -22,25 +22,37 @@ public class MenuListener implements Listener {
 
     @EventHandler
     public void onNPCClick(PlayerInteractEntityEvent event) {
-        Entity entity = event.getRightClicked();
+        Bukkit.getScheduler().runTaskAsynchronously(TheTerrierCityPlugin.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                Entity entity = event.getRightClicked();
 
-        if (!entity.isSilent()) return;
+                if (!entity.isSilent()) return;
 
-        Player player = event.getPlayer();
+                Player player = event.getPlayer();
 
-        try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
-                "SELECT shopid FROM shops WHERE name = ?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE
-        )) {
-            stmt.setString(1, entity.getCustomName());
+                try (Connection conn = TheTerrierCityPlugin.dataSource.getConnection(); PreparedStatement stmt = conn.prepareStatement(
+                        "SELECT shopid FROM shops WHERE name = ?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE
+                )) {
+                    stmt.setString(1, entity.getCustomName());
 
-            ResultSet rs = stmt.executeQuery();
+                    ResultSet rs = stmt.executeQuery();
 
-            if (rs.first()) {
-                new ShopMenu(rs.getInt(1)).open(player);
+                    if (rs.first()) {
+
+                        final int shopId = rs.getInt(1);
+
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(TheTerrierCityPlugin.getPlugin(), new Runnable() {
+                            @Override
+                            public void run() {
+                                new ShopMenu(shopId).open(player);
+                            }});
+                    }
+                } catch (SQLException e) {
+                    Bukkit.getLogger().info("Couldn't retrieve shop named " + entity.getCustomName());
+                }
             }
-        } catch (SQLException e) {
-            Bukkit.getLogger().info("Couldn't retrieve shop named " + entity.getCustomName());
-        }
+        });
     }
 
     @EventHandler
