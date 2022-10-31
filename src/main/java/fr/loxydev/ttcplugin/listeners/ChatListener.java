@@ -17,6 +17,7 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
 
         player.setDisplayName(TheTerrierCityPlugin.getPlayerUtility(player).getTeam().getColor() + player.getName());
+        player.setPlayerListName(TheTerrierCityPlugin.getPlayerUtility(player).getTeam().getColor() + player.getName());
 
         event.setJoinMessage("[" + ChatColor.GREEN + "+" + ChatColor.RESET + "] " + ChatColor.ITALIC + ChatColor.BOLD + player.getDisplayName());
 
