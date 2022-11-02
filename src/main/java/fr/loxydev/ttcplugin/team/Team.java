@@ -3,8 +3,11 @@ package fr.loxydev.ttcplugin.team;
 import fr.loxydev.ttcplugin.database.PlayerDataHandler;
 import fr.loxydev.ttcplugin.database.TeamDataHandler;
 import fr.loxydev.ttcplugin.utils.PlayerUtility;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
+import java.nio.Buffer;
 import java.util.ArrayList;
 
 public class Team {
@@ -77,5 +80,15 @@ public class Team {
 
     public void setColor(ChatColor color) {
         this.color = color;
+    }
+
+    public void sendMessage(String message) {
+        for (PlayerDataHandler member : players) {
+            Player pMember = Bukkit.getPlayer(member.getUuid());
+
+            if (pMember == null) continue;
+
+            pMember.sendMessage(message);
+        }
     }
 }

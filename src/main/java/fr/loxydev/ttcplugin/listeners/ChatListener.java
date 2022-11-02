@@ -17,6 +17,7 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
 
         player.setDisplayName(TheTerrierCityPlugin.getPlayerUtility(player).getTeam().getColor() + player.getName());
+        player.setCustomName(player.getDisplayName());
         player.setPlayerListName(TheTerrierCityPlugin.getPlayerUtility(player).getTeam().getColor() + player.getName());
         player.setCustomNameVisible(true);
 
@@ -40,8 +41,16 @@ public class ChatListener implements Listener {
     public void onChat(AsyncPlayerChatEvent event) {
         PlayerUtility player = TheTerrierCityPlugin.getPlayerUtility(event.getPlayer());
 
-        String prefix = player.getTeam().getColor() + "" + ChatColor.BOLD + player.getTeam().getTag() + ChatColor.RESET + "> ";
+        // Team chat
+        if (event.getMessage().startsWith("!")) {
+            player.getTeam().sendMessage("[" + player.getTeam().getColor() + player.getTeam().getName() + ChatColor.RESET + "] " + player.getPlayer().getName() + ": " + event.getMessage().replaceFirst("!", ""));
+            event.setCancelled(true);
+            return;
+        }
 
-        event.setFormat(prefix + event.getPlayer().getName() + ": " + event.getMessage());
+        // Chat global
+        String prefix = player.getTeam().getColor() + "" + ChatColor.BOLD + player.getTeam().getTag() + ChatColor.RESET + " ";
+
+        event.setFormat(prefix + event.getPlayer().getName() + "> " + event.getMessage());
     }
 }
